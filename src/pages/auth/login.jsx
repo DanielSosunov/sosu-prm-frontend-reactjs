@@ -1,19 +1,18 @@
 import React, { useEffect, useState } from "react";
-import {
-  InfoCircleOutlined,
-  UserOutlined,
-  EyeInvisibleOutlined,
-  EyeTwoTone,
-  LockOutlined,
-} from "@ant-design/icons";
-import { Input, Tooltip, Button, Space } from "antd";
+import { useNavigate } from "react-router-dom";
+import { Input, Button, Modal } from "antd";
+import { UserOutlined, LockOutlined } from "@ant-design/icons";
 import APIManager from "../../utils/APIManager";
+import LocalStorageManager from "../../utils/LocalStorageManager";
 
 const LoginForm = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [loginLoading, setLoginLoading] = useState(false);
   const [signupLoading, setSignupLoading] = useState(false);
+  const [errorModalVisible, setErrorModalVisible] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
+  const navigate = useNavigate();
 
   useEffect(() => {
     console.log(username, password);
@@ -22,10 +21,17 @@ const LoginForm = () => {
   const handleLogin = async () => {
     setLoginLoading(true);
     try {
-      await APIManager.login({ username, password });
-      // Handle successful login
+      const response = await APIManager.login({ username, password });
+      if (response.success === true) {
+        LocalStorageManager.setItem("authToken", response.data.token);
+        navigate("/contact");
+      } else {
+        setErrorMessage(response.message);
+        setErrorModalVisible(true);
+      }
     } catch (error) {
-      // Handle login error
+      setErrorMessage("An error occurred during login.");
+      setErrorModalVisible(true);
     } finally {
       setLoginLoading(false);
     }
@@ -34,13 +40,25 @@ const LoginForm = () => {
   const handleSignup = async () => {
     setSignupLoading(true);
     try {
-      await APIManager.signup({ username, password });
-      // Handle successful signup
+      const response = await APIManager.signup({ username, password });
+      if (response.success === true) {
+        LocalStorageManager.setItem("authToken", response.data.token);
+        navigate("/contact");
+      } else {
+        setErrorMessage(response.message);
+        setErrorModalVisible(true);
+      }
     } catch (error) {
-      // Handle signup error
+      setErrorMessage("An error occurred during signup.");
+      setErrorModalVisible(true);
     } finally {
       setSignupLoading(false);
     }
+  };
+
+  const handleErrorModalClose = () => {
+    setErrorModalVisible(false);
+    setErrorMessage("");
   };
 
   return (
@@ -66,6 +84,20 @@ const LoginForm = () => {
           Sign Up
         </Button>
       </div>
+
+      <Modal
+        open={errorModalVisible}
+        onCancel={handleErrorModalClose}
+        footer={[
+          <Button key="okay" type="primary" onClick={handleErrorModalClose}>
+            Okay
+          </Button>,
+        ]}
+        centered
+        width="80%"
+      >
+        <p>{errorMessage}</p>
+      </Modal>
     </div>
   );
 };
