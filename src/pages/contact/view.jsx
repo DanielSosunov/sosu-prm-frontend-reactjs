@@ -1,9 +1,10 @@
 import React from "react";
-import { Button, Tabs, Layout, Avatar } from "antd";
+import { Button, Tabs, Layout, Avatar, Typography } from "antd";
 import { ArrowLeftOutlined } from "@ant-design/icons";
 
 const { Header, Content } = Layout;
 const { TabPane } = Tabs;
+const { Text } = Typography;
 
 const ContactPage = ({ contact, onBack }) => {
   const { name, phone, email, photo, location } = contact;
@@ -11,36 +12,17 @@ const ContactPage = ({ contact, onBack }) => {
   return (
     <Layout style={styles.container}>
       <Header style={styles.header}>
-        <Button style={styles.backButton} onClick={onBack}>
-          <ArrowLeftOutlined />
-        </Button>
-      </Header>
-      <Content style={styles.content}>
-        <div style={styles.contactCard}>
-          <Avatar size={120} src={photo} style={{ alignSelf: "center" }} />
-          <h2 style={styles.name}>{name}</h2>
-          <p style={styles.location}>{location}</p>
-          <Tabs defaultActiveKey="details" centered>
-            <TabPane tab="Details" key="details">
-              <p style={styles.info}>
-                <span role="img" aria-label="phone">
-                  &#128241;
-                </span>{" "}
-                {phone}
-              </p>
-              <p style={styles.info}>
-                <span role="img" aria-label="email">
-                  &#128231;
-                </span>{" "}
-                {email}
-              </p>
-            </TabPane>
-            <TabPane tab="Call Log" key="callLog">
-              <p>Call log content goes here.</p>
-            </TabPane>
-          </Tabs>
+        <ArrowLeftOutlined style={styles.icon} />
+        <div style={styles.contentContainer}>
+          <Avatar src={photo} size={40} style={styles.photo} />
+          <div style={styles.textContainer}>
+            <Text style={styles.titleText}>{name}</Text>
+            <Text style={styles.subtitleText}>{phone}</Text>
+          </div>
         </div>
-      </Content>
+        <div style={{ width: "24px" }} />
+      </Header>
+      <Content style={styles.content}></Content>
     </Layout>
   );
 };
@@ -53,47 +35,42 @@ const styles = {
     backgroundColor: "yellow",
   },
   header: {
-    backgroundColor: "red",
-    padding: 0,
     display: "flex",
     alignItems: "center",
-  },
-  backButton: {
-    border: "none",
-    backgroundColor: "transparent",
-    fontSize: "16px",
-    // padding: "10px",
-  },
-  content: {
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
-    // padding: "20px",
-    backgroundColor: "green",
-  },
-  contactCard: {
-    width: "100%",
-    height: "100%",
+    justifyContent: "space-between",
+    padding: "0 24px",
     backgroundColor: "#fff",
-    padding: "20px",
-    borderRadius: "8px",
-    boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)",
+    boxShadow: "0 2px 8px rgba(0, 0, 0, 0.15)",
+  },
+  icon: {
+    fontSize: "20px",
+    color: "#333",
+    cursor: "pointer",
+  },
+  contentContainer: {
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  photo: {
+    width: "40px",
+    height: "40px",
+    borderRadius: "50%",
+    backgroundColor: "#ccc",
+    marginRight: "12px",
+  },
+  textContainer: {
     display: "flex",
     flexDirection: "column",
-    // alignItems: "center",
   },
-  name: {
-    marginTop: "10px",
-    marginBottom: "5px",
+  titleText: {
+    fontSize: "16px",
+    fontWeight: "bold",
+    color: "#333",
+    textAlign: "left",
   },
-  location: {
-    marginBottom: "20px",
-    color: "#888",
-    // backgroundColor: "blue",
-  },
-  info: {
-    marginBottom: "10px",
-    display: "flex",
-    alignItems: "center",
+  subtitleText: {
+    fontSize: "14px",
+    color: "#666",
   },
 };
