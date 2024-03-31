@@ -1,54 +1,175 @@
-import React from "react";
-import { Button, Tabs, Layout, Avatar, Typography, Card, Flex } from "antd";
-import { ArrowLeftOutlined } from "@ant-design/icons";
+import React, { useState, useEffect } from "react";
+import {
+  Button,
+  Tabs,
+  Layout,
+  Avatar,
+  Typography,
+  Card,
+  Flex,
+  Segmented,
+  Divider,
+  Affix,
+  Radio,
+} from "antd";
+import { ArrowLeftOutlined, PlusCircleOutlined } from "@ant-design/icons";
 import { MdEmojiPeople, MdFavorite } from "react-icons/md";
 import { PiHandsClappingBold } from "react-icons/pi";
-import { Bar } from "react-chartjs-2";
-import Chart from "chart.js/auto";
-import ChartDataLabels from "chartjs-plugin-datalabels";
-
-Chart.register(ChartDataLabels);
+// import "a ntd/dist/antd.css";
+import StatsCard from "../../utils/StatsCard";
+import BarChartWithTabs from "../../utils/BarChart";
+import AddInteraction from "./addinteraction";
 
 const { Header, Content } = Layout;
 const { TabPane } = Tabs;
 const { Text, Title } = Typography;
 
+const readable = {
+  positive: "Positive",
+  negative: "Negative",
+  neutral: "Neutral",
+  phone: "Phone",
+  inPerson: "In Person",
+  messages: "Messages",
+  personal: "Personal",
+  business: "Not Personal",
+};
+
 const ContactPage = ({ contact, onBack }) => {
   const { name, phone, email, photo, location } = contact;
-  const data = [
-    { label: "Personal", percent: 60, numb: 6 },
-    { label: "Not Personal", percent: 40, numb: 4 },
-  ];
-  return (
+
+  const [interactionMode, setInteractionMode] = useState(true);
+
+  var interaction = {
+    totalInteractions: 10,
+    initiatedByMe: 4,
+    initiatedByContact: 6,
+    interactionTypes: {
+      phone: 5,
+      inPerson: 3,
+      messages: 2,
+    },
+    interactionSentiments: {
+      positive: 6,
+      neutral: 3,
+      negative: 1,
+    },
+    interactionPurposes: {
+      personal: 7,
+      business: 3,
+    },
+    resolvedIssues: 2,
+    pendingFollowUps: 1,
+    averageResponseTime: 2.5,
+    longestInteractionDuration: 120,
+    shortestInteractionDuration: 5,
+  };
+
+  const sentiment = Object.keys(interaction.interactionSentiments).map(
+    (sentiment) => {
+      return {
+        label: readable[sentiment],
+        numb: interaction.interactionSentiments[sentiment],
+        percent:
+          (interaction.interactionSentiments[sentiment] /
+            interaction.totalInteractions) *
+          100,
+      };
+    }
+  );
+
+  const purpose = Object.keys(interaction.interactionPurposes).map(
+    (sentiment) => {
+      return {
+        label: readable[sentiment],
+        numb: interaction.interactionPurposes[sentiment],
+        percent:
+          (interaction.interactionPurposes[sentiment] /
+            interaction.totalInteractions) *
+          100,
+      };
+    }
+  );
+
+  const type = Object.keys(interaction.interactionTypes).map((sentiment) => {
+    return {
+      label: readable[sentiment],
+      numb: interaction.interactionTypes[sentiment],
+      percent:
+        (interaction.interactionTypes[sentiment] /
+          interaction.totalInteractions) *
+        100,
+    };
+  });
+
+  var data = { type, purpose, sentiment };
+
+  return interactionMode ? (
+    <AddInteraction contact={contact} />
+  ) : (
     <Layout style={styles.container}>
-      <Header style={styles.header}>
-        <ArrowLeftOutlined style={styles.icon} />
-        <div style={styles.contentContainer}>
+      <Affix offsetTop={0}>
+        <div
+          style={{
+            backgroundColor: "white",
+            width: "100%",
+            display: "flex",
+            flexDirection: "row",
+            justifyContent: "center",
+          }}
+        >
+          <ArrowLeftOutlined
+            style={{
+              position: "absolute",
+              left: "3%",
+              alignSelf: "center",
+              //   backgroundColor: "green",
+              fontSize: "1.5em",
+            }}
+          />
+
           <Avatar src={photo} size={40} style={styles.photo} />
-          <div style={styles.textContainer}>
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              marginLeft: "1%",
+              marginTop: "1%",
+              marginBottom: "1%",
+            }}
+          >
             <Text style={styles.titleText}>{name}</Text>
             <Text style={styles.subtitleText}>{phone}</Text>
           </div>
         </div>
-        <div style={{ width: "24px" }} />
-      </Header>
+      </Affix>
+
       <Content
         style={{
           width: "95%",
           //   backgroundColor: "red",
           margin: "auto",
+          display: "flex",
+          flexDirection: "column",
+          gap: "1em",
+          overflow: "auto",
+          marginBottom: "3%",
+          scrollbarWidth: "none",
         }}
       >
         <div
           style={{
             display: "flex",
             flexDirection: "row",
-            gap: "1em",
+            // gap: "1em",
             marginTop: "1em",
+            backgroundColor: "#ededed",
+            padding: "3%",
+            borderRadius: "2%",
           }}
         >
           <StatsCard
-            stat="6"
+            stat={interaction.totalInteractions}
             text={"Interactions with " + name}
             cardColor={"#FDDCFF"}
             icon={
@@ -59,8 +180,18 @@ const ContactPage = ({ contact, onBack }) => {
               />
             }
           />
+
+          <Divider
+            type="vertical"
+            style={{
+              height: "100%",
+            }}
+          />
           <StatsCard
-            stat="6"
+            style={{
+              marginRight: "1%",
+            }}
+            stat={interaction.initiatedByContact}
             text={"They contacted you"}
             cardColor={"#ECE4FF"}
             icon={
@@ -71,8 +202,10 @@ const ContactPage = ({ contact, onBack }) => {
               />
             }
           />
+          {/* <div style={{ width: "5%" }} /> */}
+
           <StatsCard
-            stat="6"
+            stat={interaction.initiatedByMe}
             text={"You contacted them"}
             cardColor={"#D9E7F7"}
             icon={
@@ -85,178 +218,24 @@ const ContactPage = ({ contact, onBack }) => {
           />
         </div>
 
-        <BarChartComponent data={data} colorType={"red"} />
+        <BarChartWithTabs data={data} />
+
+        <Button
+          type="primary"
+          shape="round"
+          size={"large"}
+          icon={<PlusCircleOutlined />}
+          style={{
+            position: "absolute",
+            bottom: "3%",
+            width: "95%",
+            // margin: "auto",
+          }}
+        >
+          Add Interaction
+        </Button>
       </Content>
     </Layout>
-  );
-};
-const BarChartComponent = ({ data, colorType }) => {
-  const colors = {
-    blue: ["#CAF0F8", "#ADE8F4", "#90E0EF", "#48CAE4"], // Blue colors from light to medium-light
-    green: ["#d0ffd0", "#b0ffb0", "#90ff90", "#60ff60"], // Green colors from light to medium-light
-    red: ["#ffcccc", "#ffb3b3", "#ff9999", "#ff8080"], // Red colors from light to medium-light
-  };
-  function assignColors(data, colors, type) {
-    let colorIndex = 0; // Initialize color index
-    switch (type) {
-      case "blue":
-        data.forEach((item, index) => {
-          item.color = colors.blue[colorIndex];
-          colorIndex = (colorIndex + 1) % colors.blue.length; // Increment color index, loop back if exceeds array length
-        });
-        break;
-      case "green":
-        data.forEach((item, index) => {
-          item.color = colors.green[colorIndex];
-          colorIndex = (colorIndex + 1) % colors.green.length; // Increment color index, loop back if exceeds array length
-        });
-        break;
-      case "red":
-        data.forEach((item, index) => {
-          item.color = colors.red[colorIndex];
-          colorIndex = (colorIndex + 1) % colors.red.length; // Increment color index, loop back if exceeds array length
-        });
-        break;
-      default:
-        console.error("Invalid type:", type);
-    }
-  }
-
-  assignColors(data, colors, colorType);
-
-  const chartData = {
-    labels: data.map((item) => item.label),
-    datasets: [
-      {
-        label: "Dataset 1",
-        data: data.map((item) => item.percent),
-        backgroundColor: data.map((item) => item.color),
-        borderColor: data.map((item) => item.color),
-        borderWidth: 1,
-      },
-    ],
-  };
-  const options = {
-    indexAxis: "y", // Use a horizontal bar chart
-    scales: {
-      x: {
-        display: false, // Hide the lower axis numbers
-        beginAtZero: true,
-      },
-      y: {
-        beginAtZero: true,
-        ticks: {
-          font: {
-            size: "10em", // Set the font size for the labels on the left side
-          },
-        },
-      },
-    },
-    plugins: {
-      legend: {
-        display: false, // Hide the legend
-      },
-      tooltip: {
-        enabled: false, // Disable tooltips
-      },
-      datalabels: {
-        display: true,
-        anchor: "center", // Position labels at the end of each bar
-        align: "center", // Align labels to the top of each bar
-        formatter: (value, context) => {
-          // Display the value and the numb variable
-          const { dataIndex } = context;
-          const numb = data[dataIndex].numb;
-          return `${numb} times (${value}%)`; // Adjusted label format
-        },
-        color: "#000", // Set the color of the datalabels text
-        font: {
-          weight: "bold",
-        },
-      },
-    },
-    maintainAspectRatio: false, // Adjust aspect ratio
-  };
-
-  return (
-    <Flex
-      vertical
-      style={{
-        backgroundColor: "#ededed",
-        // width: "95%",
-        margin: "auto",
-        padding: "3%",
-        borderRadius: "5%",
-        marginTop: "3%",
-      }}
-    >
-      <Text
-        style={{
-          color: "black",
-          fontWeight: "bolder",
-          fontSize: "1em",
-          textAlign: "left",
-        }}
-      >
-        Purpose Breakdown
-      </Text>
-      <Flex
-        style={{
-          width: "100%",
-          //   display: "flex",
-          //   flexDirection: "column",
-          // margin: "auto",
-          // backgroundColor: "#ededed",
-          // overflow: "hidden", // Ensure the container properly contains its children
-        }}
-      >
-        <Bar
-          data={chartData}
-          options={options}
-          // style={{ height: "80%", margin: "auto" }}
-        />
-      </Flex>
-    </Flex>
-  );
-};
-
-const StatsCard = ({ text, icon, stat, cardColor }) => {
-  const cardStyle = {
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "center",
-    justifyContent: "center",
-    width: "100%",
-    borderRadius: "10px", // Adjust as needed for rounded corners
-    // boxShadow: "0 2px 8px rgba(0, 0, 0, 0.15)", // Adjust as needed for shadow effect
-    backgroundColor: cardColor, // Replace with actual color for each activity
-    padding: "1em",
-  };
-
-  return (
-    <div style={cardStyle}>
-      {icon}
-      <Text
-        style={{
-          color: "black",
-          fontWeight: "bolder",
-          lineHeight: "1.2",
-          fontSize: "2em",
-        }}
-      >
-        {stat}
-      </Text>
-      <Text
-        style={{
-          lineHeight: "1",
-          fontSize: "0.8em",
-          color: "#8A7A9A",
-          fontWeight: "normal",
-        }}
-      >
-        {text}
-      </Text>
-    </div>
   );
 };
 
@@ -264,14 +243,13 @@ export default ContactPage;
 
 const styles = {
   container: {
-    height: "100vh",
+    height: window.innerHeight,
     // backgroundColor: "yellow",
   },
   header: {
     display: "flex",
     alignItems: "center",
-    justifyContent: "space-between",
-    padding: "0 24px",
+    // justifyContent: "space-between",
     backgroundColor: "#fff",
     boxShadow: "0 2px 8px rgba(0, 0, 0, 0.15)",
   },
@@ -290,12 +268,10 @@ const styles = {
     height: "40px",
     borderRadius: "50%",
     backgroundColor: "#ccc",
-    marginRight: "12px",
+    alignSelf: "center",
+    // marginRight: "12px",
   },
-  textContainer: {
-    display: "flex",
-    flexDirection: "column",
-  },
+
   titleText: {
     fontSize: "16px",
     fontWeight: "bold",
