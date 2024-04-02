@@ -36,7 +36,7 @@ const readable = {
 };
 
 const ContactPage = ({ contact, onBack }) => {
-  const { name, phone, email, photo, location } = contact;
+  const { name, phone, email, photo } = contact;
 
   const [interactionMode, setInteractionMode] = useState(true);
 

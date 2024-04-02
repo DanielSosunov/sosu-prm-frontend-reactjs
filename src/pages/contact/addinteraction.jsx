@@ -23,6 +23,7 @@ import { PiHandsClappingBold } from "react-icons/pi";
 // import "a ntd/dist/antd.css";
 import StatsCard from "../../utils/StatsCard";
 import BarChartWithTabs from "../../utils/BarChart";
+import APIManager from "../../utils/APIManager";
 
 const { Header, Content } = Layout;
 const { TabPane } = Tabs;
@@ -75,6 +76,7 @@ const AddInteraction = (props) => {
     messages: "Messages",
     personal: "Personal",
     business: "Not Personal",
+    other: "other",
     initiatedByMe: "I contacted " + props.contact.name,
     initiatedByContact: props.contact.name + " contacted me",
   };
@@ -165,7 +167,21 @@ const AddInteraction = (props) => {
             width: "95%",
             // margin: "auto",
           }}
-          onClick={() => {
+          onClick={async () => {
+            var interaction = await APIManager.addInteraction(
+              props.contact,
+              props.contact.id || null,
+              {
+                initiatedBy: who === "initiatedByMe" ? "me" : "contact",
+                type: {
+                  channel: type,
+                  direction: who === "initiatedByMe" ? "outgoing" : "incoming",
+                },
+                purpose: purpose,
+                sentiment: sentiment,
+              }
+            );
+            console.log(interaction);
             // setInteractionMode(true);
           }}
         >
