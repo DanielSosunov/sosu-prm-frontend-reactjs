@@ -41,6 +41,7 @@ const APIManager = {
   // Specific API methods
   login: (loginInfo) => APIManager.request("/auth/login", "POST", loginInfo),
   signup: (loginInfo) => APIManager.request("/auth/signup", "POST", loginInfo),
+  // addInteraction: ()
 };
 
 export default APIManager;

@@ -105,7 +105,7 @@ const ContactPage = ({ contact, onBack }) => {
   var data = { type, purpose, sentiment };
 
   return interactionMode ? (
-    <AddInteraction contact={contact} />
+    <AddInteraction contact={contact} setInteractionMode={setInteractionMode} />
   ) : (
     <Layout style={styles.container}>
       <Affix offsetTop={0}>
@@ -116,6 +116,7 @@ const ContactPage = ({ contact, onBack }) => {
             display: "flex",
             flexDirection: "row",
             justifyContent: "center",
+            height: 60,
           }}
         >
           <ArrowLeftOutlined
@@ -124,7 +125,7 @@ const ContactPage = ({ contact, onBack }) => {
               left: "3%",
               alignSelf: "center",
               //   backgroundColor: "green",
-              fontSize: "1.5em",
+              fontSize: "16px",
             }}
           />
 
@@ -136,6 +137,7 @@ const ContactPage = ({ contact, onBack }) => {
               marginLeft: "1%",
               marginTop: "1%",
               marginBottom: "1%",
+              justifyContent: "center",
             }}
           >
             <Text style={styles.titleText}>{name}</Text>
@@ -230,6 +232,9 @@ const ContactPage = ({ contact, onBack }) => {
             bottom: "3%",
             width: "95%",
             // margin: "auto",
+          }}
+          onClick={() => {
+            setInteractionMode(true);
           }}
         >
           Add Interaction

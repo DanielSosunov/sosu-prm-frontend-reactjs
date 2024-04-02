@@ -12,7 +12,12 @@ import {
   Affix,
   Radio,
 } from "antd";
-import { ArrowLeftOutlined, PlusCircleOutlined } from "@ant-design/icons";
+
+import {
+  ArrowLeftOutlined,
+  PlusCircleOutlined,
+  CheckCircleOutlined,
+} from "@ant-design/icons";
 import { MdEmojiPeople, MdFavorite } from "react-icons/md";
 import { PiHandsClappingBold } from "react-icons/pi";
 // import "a ntd/dist/antd.css";
@@ -23,19 +28,9 @@ const { Header, Content } = Layout;
 const { TabPane } = Tabs;
 const { Text, Title } = Typography;
 
-const readable = {
-  positive: "Positive",
-  negative: "Negative",
-  neutral: "Neutral",
-  phone: "Phone",
-  inPerson: "In Person",
-  messages: "Messages",
-  personal: "Personal",
-  business: "Not Personal",
-};
 const ButtonRow = (props) => {
   const handleClick = (value) => {
-    props.setCurrent(props.options.indexOf(value));
+    props.setCurrent(value);
   };
 
   useEffect(() => {
@@ -60,10 +55,10 @@ const ButtonRow = (props) => {
           }}
           size="large"
           key={option}
-          type={props.options[props.current] === option ? "primary" : "default"}
+          type={props.current === option ? "primary" : "default"}
           onClick={() => handleClick(option)}
         >
-          {option}
+          {props.readable[option]}
         </Button>
       ))}
     </div>
@@ -71,85 +66,178 @@ const ButtonRow = (props) => {
 };
 
 const AddInteraction = (props) => {
-  var typeOptions = ["Phone", "In Person", "Message", "Other"];
-  var purposeOptions = ["Personal", "Not Personal"];
-  var sentimentOptions = ["Positive", "Neutral", "Negative"];
-  var whoOptions = [
-    "I contacted " + props.contact.name,
-    props.contact.name + " contacted me",
-  ];
+  const readable = {
+    positive: "Positive",
+    negative: "Negative",
+    neutral: "Neutral",
+    phone: "Phone",
+    inPerson: "In Person",
+    messages: "Messages",
+    personal: "Personal",
+    business: "Not Personal",
+    initiatedByMe: "I contacted " + props.contact.name,
+    initiatedByContact: props.contact.name + " contacted me",
+  };
+  var typeOptions = ["phone", "inPerson", "messages", "other"];
+  var purposeOptions = ["personal", "business"];
+  var sentimentOptions = ["positive", "neutral", "negative"];
+  var whoOptions = ["initiatedByMe", "initiatedByContact"];
 
-  const [type, setType] = useState(0);
-  const [purpose, setPurpose] = useState(0);
-  const [sentiment, setSentiment] = useState(0);
-  const [who, setWho] = useState(0);
+  const [type, setType] = useState("phone");
+  const [purpose, setPurpose] = useState("personal");
+  const [sentiment, setSentiment] = useState("positive");
+  const [who, setWho] = useState("initiatedByMe");
 
   return (
     <div
       style={{
-        width: "95%",
+        // width: "95%",
         margin: "auto",
-        // backgroundColor: "lightblue",
+        backgroundColor: "#f5f5f5",
+        height: "100vh",
         textAlign: "left",
-        display: "flex",
-        flexDirection: "column",
+        // display: "flex",
+        // flexDirection: "column",
         // gap: "1em",
       }}
     >
-      <Text
-        style={{
-          fontSize: "1.2em",
-          fontWeight: "bolder",
-          marginBottom: "2%",
-        }}
-      >
-        Who Contacted Who
-      </Text>
-      <ButtonRow options={whoOptions} current={who} setCurrent={setWho} />
+      <Affix offsetTop={0}>
+        <div
+          style={{
+            backgroundColor: "white",
+            width: "100%",
+            display: "flex",
+            flexDirection: "row",
+            justifyContent: "center",
+            // marginTop: "1%",
+            marginBottom: "1%",
+            height: 60,
+          }}
+        >
+          <ArrowLeftOutlined
+            style={{
+              position: "absolute",
+              left: "3%",
+              alignSelf: "center",
+              //   backgroundColor: "green",
+              fontSize: "16px",
+            }}
+            onClick={() => {
+              props.setInteractionMode(false);
+            }}
+          />
+          <Text style={{ ...styles.titleText, alignSelf: "center" }}>
+            Interaction with {props.contact.name}
+          </Text>
 
-      <Text
-        style={{
-          fontSize: "1.2em",
-          fontWeight: "bolder",
-          marginBottom: "2%",
-          marginTop: "4%",
-        }}
-      >
-        How did you guys interact?
-      </Text>
-      <ButtonRow options={typeOptions} current={type} setCurrent={setType} />
+          {/* <Avatar src={props.contact.photo} size={40} style={styles.photo} />
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              marginLeft: "1%",
+              marginTop: "1%",
+              marginBottom: "1%",
+            }}
+          >
+            <Text style={styles.titleText}>{props.contact.name}</Text>
+            <Text style={styles.subtitleText}>{props.contact.phone}</Text>
+          </div> */}
+        </div>
+      </Affix>
 
-      <Text
+      <div
         style={{
-          fontSize: "1.2em",
-          fontWeight: "bolder",
-          marginBottom: "2%",
-          marginTop: "4%",
+          width: "95%",
+          margin: "auto",
+          display: "flex",
+          flexDirection: "column",
         }}
       >
-        What was the purpose?
-      </Text>
-      <ButtonRow
-        options={purposeOptions}
-        current={purpose}
-        setCurrent={setPurpose}
-      />
+        <Button
+          type="primary"
+          shape="round"
+          size={"large"}
+          icon={<CheckCircleOutlined />}
+          style={{
+            position: "absolute",
+            bottom: "3%",
+            width: "95%",
+            // margin: "auto",
+          }}
+          onClick={() => {
+            // setInteractionMode(true);
+          }}
+        >
+          Save Interaction
+        </Button>
+        <Text
+          style={{
+            fontSize: "1.2em",
+            fontWeight: "bolder",
+            marginBottom: "2%",
+          }}
+        >
+          Who Contacted Who
+        </Text>
+        <ButtonRow
+          readable={readable}
+          options={whoOptions}
+          current={who}
+          setCurrent={setWho}
+        />
 
-      <Text
-        style={{
-          fontSize: "1.2em",
-          fontWeight: "bolder",
-          marginTop: "4%",
-          marginBottom: "2%",
-        }}
-      >
-        How did you feel?
-      </Text>
-      <ButtonRow
-        options={sentimentOptions}
-        current={sentiment}
-        setCurrent={setSentiment}
-      />
+        <Text
+          style={{
+            fontSize: "1.2em",
+            fontWeight: "bolder",
+            marginBottom: "2%",
+            marginTop: "4%",
+          }}
+        >
+          How did you guys interact?
+        </Text>
+        <ButtonRow
+          readable={readable}
+          options={typeOptions}
+          current={type}
+          setCurrent={setType}
+        />
+
+        <Text
+          style={{
+            fontSize: "1.2em",
+            fontWeight: "bolder",
+            marginBottom: "2%",
+            marginTop: "4%",
+          }}
+        >
+          What was the purpose?
+        </Text>
+        <ButtonRow
+          readable={readable}
+          options={purposeOptions}
+          current={purpose}
+          setCurrent={setPurpose}
+        />
+
+        <Text
+          style={{
+            fontSize: "1.2em",
+            fontWeight: "bolder",
+            marginTop: "4%",
+            marginBottom: "2%",
+          }}
+        >
+          How did you feel?
+        </Text>
+        <ButtonRow
+          readable={readable}
+          options={sentimentOptions}
+          current={sentiment}
+          setCurrent={setSentiment}
+        />
+      </div>
     </div>
   );
 };
