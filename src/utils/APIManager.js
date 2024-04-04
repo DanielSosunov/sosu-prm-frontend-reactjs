@@ -41,12 +41,19 @@ const APIManager = {
   // Specific API methods
   login: (loginInfo) => APIManager.request("/auth/login", "POST", loginInfo),
   signup: (loginInfo) => APIManager.request("/auth/signup", "POST", loginInfo),
-  addInteraction: (contact, contactId, interaction) =>
-    APIManager.request("/interaction", "POST", {
-      contact,
-      contactId,
-      interaction,
-    }),
+  addInteraction: (contact, contactId, interaction, authToken) =>
+    APIManager.request(
+      "/interaction",
+      "POST",
+      {
+        contact,
+        contactId,
+        interaction,
+      },
+      {
+        Authorization: `Bearer ${authToken}`,
+      }
+    ),
 };
 
 export default APIManager;

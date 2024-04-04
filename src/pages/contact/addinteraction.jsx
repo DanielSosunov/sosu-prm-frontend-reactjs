@@ -24,6 +24,7 @@ import { PiHandsClappingBold } from "react-icons/pi";
 import StatsCard from "../../utils/StatsCard";
 import BarChartWithTabs from "../../utils/BarChart";
 import APIManager from "../../utils/APIManager";
+import LocalStorageManager from "../../utils/LocalStorageManager";
 
 const { Header, Content } = Layout;
 const { TabPane } = Tabs;
@@ -85,6 +86,7 @@ const AddInteraction = (props) => {
   var sentimentOptions = ["positive", "neutral", "negative"];
   var whoOptions = ["initiatedByMe", "initiatedByContact"];
 
+  const [loading, setLoading] = useState(false);
   const [type, setType] = useState("phone");
   const [purpose, setPurpose] = useState("personal");
   const [sentiment, setSentiment] = useState("positive");
@@ -161,6 +163,7 @@ const AddInteraction = (props) => {
           shape="round"
           size={"large"}
           icon={<CheckCircleOutlined />}
+          loading={loading}
           style={{
             position: "absolute",
             bottom: "3%",
@@ -168,6 +171,8 @@ const AddInteraction = (props) => {
             // margin: "auto",
           }}
           onClick={async () => {
+            setLoading(true);
+            var authToken = LocalStorageManager.getItem("authToken");
             var interaction = await APIManager.addInteraction(
               props.contact,
               props.contact.id || null,
@@ -179,9 +184,11 @@ const AddInteraction = (props) => {
                 },
                 purpose: purpose,
                 sentiment: sentiment,
-              }
+              },
+              authToken
             );
             console.log(interaction);
+            setLoading(false);
             // setInteractionMode(true);
           }}
         >
