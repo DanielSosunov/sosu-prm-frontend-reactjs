@@ -64,6 +64,13 @@ const APIManager = {
         Authorization: `Bearer ${authToken}`,
       }
     ),
+  getPaginatedInteractions: async (contactId, startAfter, authToken) => {
+    var url = `/interaction/paginated?contactId=${contactId}`;
+    if (startAfter) url += `&startAfter=${startAfter}`;
+    return APIManager.request(url, "GET", null, {
+      Authorization: `Bearer ${authToken}`,
+    });
+  },
 };
 
 export default APIManager;

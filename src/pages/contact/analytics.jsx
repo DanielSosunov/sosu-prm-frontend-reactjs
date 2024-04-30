@@ -130,108 +130,106 @@ const Analytics = ({ contact }) => {
   }, [monthlyInteraction]);
 
   return (
-    <Layout style={styles.container}>
-      <Content
+    <Content
+      style={{
+        // width: "95%",
+        // margin: "auto",
+        position: "relative",
+        //   backgroundColor: "red",
+        //   margin: "auto",
+        display: "flex",
+        flexDirection: "column",
+        gap: "1em",
+        overflow: "auto",
+        //   marginBottom: "3%",
+        scrollbarWidth: "none",
+        zIndex: 9,
+        opacity: loading ? 0.3 : 1,
+      }}
+    >
+      {loading && (
+        <Spin
+          style={{
+            position: "absolute",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            // height: "100vh",
+            width: "100%",
+            // top: "50%",
+            top: 0,
+            left: 0,
+            height: "100%",
+            // backgroundColor: "green",
+            // left: 0,
+            // top: 0,
+          }}
+          indicator={<LoadingOutlined style={{ fontSize: 24 }} spin />}
+        />
+      )}
+      <div
         style={{
-          width: "95%",
-          position: "relative",
-          //   backgroundColor: "red",
-          margin: "auto",
           display: "flex",
-          flexDirection: "column",
-          gap: "1em",
-          overflow: "auto",
-          //   marginBottom: "3%",
-          scrollbarWidth: "none",
-          zIndex: 9,
-          opacity: loading ? 0.3 : 1,
+          flexDirection: "row",
+          // gap: "1em",
+          marginTop: "1em",
+          backgroundColor: "#ededed",
+          padding: "3%",
+          borderRadius: "2%",
         }}
       >
-        {loading && (
-          <Spin
-            style={{
-              position: "absolute",
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-              // height: "100vh",
-              width: "100%",
-              // top: "50%",
-              top: 0,
-              left: 0,
-              height: "100%",
-              // backgroundColor: "green",
-              // left: 0,
-              // top: 0,
-            }}
-            indicator={<LoadingOutlined style={{ fontSize: 24 }} spin />}
-          />
-        )}
-        <div
+        <StatsCard
+          stat={monthlyInteraction.totalInteractions}
+          text={"Interactions with " + name}
+          cardColor={"#FDDCFF"}
+          icon={
+            <MdEmojiPeople
+              size={"2em"}
+              color={"#E957F3"}
+              style={{ marginBottom: "1em" }}
+            />
+          }
+        />
+
+        <Divider
+          type="vertical"
           style={{
-            display: "flex",
-            flexDirection: "row",
-            // gap: "1em",
-            marginTop: "1em",
-            backgroundColor: "#ededed",
-            padding: "3%",
-            borderRadius: "2%",
+            height: "100%",
           }}
-        >
-          <StatsCard
-            stat={monthlyInteraction.totalInteractions}
-            text={"Interactions with " + name}
-            cardColor={"#FDDCFF"}
-            icon={
-              <MdEmojiPeople
-                size={"2em"}
-                color={"#E957F3"}
-                style={{ marginBottom: "1em" }}
-              />
-            }
-          />
+        />
+        <StatsCard
+          style={{
+            marginRight: "1%",
+          }}
+          stat={monthlyInteraction.initiatedByContact}
+          text={"They contacted you"}
+          cardColor={"#ECE4FF"}
+          icon={
+            <MdFavorite
+              size={"2em"}
+              color={"#A279F8"}
+              style={{ marginBottom: "1em" }}
+            />
+          }
+        />
+        {/* <div style={{ width: "5%" }} /> */}
 
-          <Divider
-            type="vertical"
-            style={{
-              height: "100%",
-            }}
-          />
-          <StatsCard
-            style={{
-              marginRight: "1%",
-            }}
-            stat={monthlyInteraction.initiatedByContact}
-            text={"They contacted you"}
-            cardColor={"#ECE4FF"}
-            icon={
-              <MdFavorite
-                size={"2em"}
-                color={"#A279F8"}
-                style={{ marginBottom: "1em" }}
-              />
-            }
-          />
-          {/* <div style={{ width: "5%" }} /> */}
+        <StatsCard
+          stat={monthlyInteraction.initiatedByMe}
+          text={"You contacted them"}
+          cardColor={"#D9E7F7"}
+          icon={
+            <PiHandsClappingBold
+              size={"2em"}
+              color={"#4688DB"}
+              style={{ marginBottom: "1em" }}
+            />
+          }
+        />
+      </div>
 
-          <StatsCard
-            stat={monthlyInteraction.initiatedByMe}
-            text={"You contacted them"}
-            cardColor={"#D9E7F7"}
-            icon={
-              <PiHandsClappingBold
-                size={"2em"}
-                color={"#4688DB"}
-                style={{ marginBottom: "1em" }}
-              />
-            }
-          />
-        </div>
-
-        {analytics && <BarChartWithTabs data={analytics} />}
-        <Divider />
-      </Content>
-    </Layout>
+      {analytics && <BarChartWithTabs data={analytics} />}
+    </Content>
   );
 };
 

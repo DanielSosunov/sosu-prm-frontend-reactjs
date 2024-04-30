@@ -27,6 +27,7 @@ import AddInteraction from "./addinteraction";
 import Analytics from "./analytics";
 import APIManager from "../../utils/APIManager";
 import LocalStorageManager from "../../utils/LocalStorageManager";
+import InteractionsPaginated from "./interactionspaginated";
 
 const { Header, Content } = Layout;
 const { TabPane } = Tabs;
@@ -52,7 +53,7 @@ const ContactPage = ({ contact, onBack }) => {
   return interactionMode ? (
     <AddInteraction contact={contact} setInteractionMode={setInteractionMode} />
   ) : (
-    <div style={styles.container}>
+    <div>
       <Affix offsetTop={0}>
         <div
           style={{
@@ -90,8 +91,12 @@ const ContactPage = ({ contact, onBack }) => {
           </div>
         </div>
       </Affix>
-
-      <Analytics contact={contact} />
+      <div style={styles.container}>
+        <div style={{ width: "95%", margin: "auto" }}>
+          <Analytics contact={contact} />
+          <InteractionsPaginated contact={contact} />
+        </div>
+      </div>
     </div>
   );
 };
@@ -101,7 +106,12 @@ export default ContactPage;
 const styles = {
   container: {
     height: window.innerHeight,
-    backgroundColor: "#f5f5f5",
+    backgroundColor: "#f3f3f3",
+    // height: "fit",
+    // width: "95%",
+    // margin: "auto",
+    // paddingLeft: "2.5%",
+    // paddingRight: "2.5%",
   },
   header: {
     display: "flex",

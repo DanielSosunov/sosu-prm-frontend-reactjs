@@ -155,7 +155,7 @@ const BarChartWithTabs = ({ data }) => {
     <div
       style={{
         backgroundColor: "#ededed",
-        width: "100%",
+        // width: "100%",
         padding: "3%",
         borderRadius: "2%",
       }}
