@@ -11,14 +11,22 @@ import {
   Divider,
   Affix,
   Radio,
+  Spin,
 } from "antd";
-import { ArrowLeftOutlined, PlusCircleOutlined } from "@ant-design/icons";
+import {
+  ArrowLeftOutlined,
+  PlusCircleOutlined,
+  LoadingOutlined,
+} from "@ant-design/icons";
 import { MdEmojiPeople, MdFavorite } from "react-icons/md";
 import { PiHandsClappingBold } from "react-icons/pi";
 // import "a ntd/dist/antd.css";
 import StatsCard from "../../utils/StatsCard";
 import BarChartWithTabs from "../../utils/BarChart";
 import AddInteraction from "./addinteraction";
+import Analytics from "./analytics";
+import APIManager from "../../utils/APIManager";
+import LocalStorageManager from "../../utils/LocalStorageManager";
 
 const { Header, Content } = Layout;
 const { TabPane } = Tabs;
@@ -33,81 +41,18 @@ const readable = {
   messages: "Messages",
   personal: "Personal",
   business: "Not Personal",
+  other: "Other",
 };
 
 const ContactPage = ({ contact, onBack }) => {
   const { name, phone, email, photo } = contact;
 
-  const [interactionMode, setInteractionMode] = useState(true);
-
-  var interaction = {
-    totalInteractions: 10,
-    initiatedByMe: 4,
-    initiatedByContact: 6,
-    interactionTypes: {
-      phone: 5,
-      inPerson: 3,
-      messages: 2,
-    },
-    interactionSentiments: {
-      positive: 6,
-      neutral: 3,
-      negative: 1,
-    },
-    interactionPurposes: {
-      personal: 7,
-      business: 3,
-    },
-    resolvedIssues: 2,
-    pendingFollowUps: 1,
-    averageResponseTime: 2.5,
-    longestInteractionDuration: 120,
-    shortestInteractionDuration: 5,
-  };
-
-  const sentiment = Object.keys(interaction.interactionSentiments).map(
-    (sentiment) => {
-      return {
-        label: readable[sentiment],
-        numb: interaction.interactionSentiments[sentiment],
-        percent:
-          (interaction.interactionSentiments[sentiment] /
-            interaction.totalInteractions) *
-          100,
-      };
-    }
-  );
-
-  const purpose = Object.keys(interaction.interactionPurposes).map(
-    (sentiment) => {
-      return {
-        label: readable[sentiment],
-        numb: interaction.interactionPurposes[sentiment],
-        percent:
-          (interaction.interactionPurposes[sentiment] /
-            interaction.totalInteractions) *
-          100,
-      };
-    }
-  );
-
-  const type = Object.keys(interaction.interactionTypes).map((sentiment) => {
-    return {
-      label: readable[sentiment],
-      numb: interaction.interactionTypes[sentiment],
-      percent:
-        (interaction.interactionTypes[sentiment] /
-          interaction.totalInteractions) *
-        100,
-    };
-  });
-
-  var data = { type, purpose, sentiment };
+  const [interactionMode, setInteractionMode] = useState(false);
 
   return interactionMode ? (
     <AddInteraction contact={contact} setInteractionMode={setInteractionMode} />
   ) : (
-    <Layout style={styles.container}>
+    <div style={styles.container}>
       <Affix offsetTop={0}>
         <div
           style={{
@@ -146,101 +91,8 @@ const ContactPage = ({ contact, onBack }) => {
         </div>
       </Affix>
 
-      <Content
-        style={{
-          width: "95%",
-          //   backgroundColor: "red",
-          margin: "auto",
-          display: "flex",
-          flexDirection: "column",
-          gap: "1em",
-          overflow: "auto",
-          marginBottom: "3%",
-          scrollbarWidth: "none",
-        }}
-      >
-        <div
-          style={{
-            display: "flex",
-            flexDirection: "row",
-            // gap: "1em",
-            marginTop: "1em",
-            backgroundColor: "#ededed",
-            padding: "3%",
-            borderRadius: "2%",
-          }}
-        >
-          <StatsCard
-            stat={interaction.totalInteractions}
-            text={"Interactions with " + name}
-            cardColor={"#FDDCFF"}
-            icon={
-              <MdEmojiPeople
-                size={"2em"}
-                color={"#E957F3"}
-                style={{ marginBottom: "1em" }}
-              />
-            }
-          />
-
-          <Divider
-            type="vertical"
-            style={{
-              height: "100%",
-            }}
-          />
-          <StatsCard
-            style={{
-              marginRight: "1%",
-            }}
-            stat={interaction.initiatedByContact}
-            text={"They contacted you"}
-            cardColor={"#ECE4FF"}
-            icon={
-              <MdFavorite
-                size={"2em"}
-                color={"#A279F8"}
-                style={{ marginBottom: "1em" }}
-              />
-            }
-          />
-          {/* <div style={{ width: "5%" }} /> */}
-
-          <StatsCard
-            stat={interaction.initiatedByMe}
-            text={"You contacted them"}
-            cardColor={"#D9E7F7"}
-            icon={
-              <PiHandsClappingBold
-                size={"2em"}
-                color={"#4688DB"}
-                style={{ marginBottom: "1em" }}
-              />
-            }
-          />
-        </div>
-
-        <BarChartWithTabs data={data} />
-
-        <Button
-          type="primary"
-          shape="round"
-          size={"large"}
-          icon={<PlusCircleOutlined />}
-          style={{
-            position: "absolute",
-            bottom: "3%",
-            width: "95%",
-            // margin: "auto",
-          }}
-          onClick={() => {
-            setInteractionMode(true);
-          }}
-        >
-          Add Interaction
-        </Button>
-      </Content>
-    </Layout>
+      <Analytics contact={contact} />
+    </div>
   );
 };
 
@@ -249,7 +101,7 @@ export default ContactPage;
 const styles = {
   container: {
     height: window.innerHeight,
-    // backgroundColor: "yellow",
+    backgroundColor: "#f5f5f5",
   },
   header: {
     display: "flex",

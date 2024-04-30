@@ -10,7 +10,7 @@ function App() {
         <Routes>
           <Route path="/" element={<LoginForm />} />
           <Route
-            path="/next"
+            path="/contact"
             element={
               <ContactPage
                 contact={{

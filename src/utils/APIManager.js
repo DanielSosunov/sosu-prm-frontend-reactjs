@@ -3,6 +3,7 @@
 const APIManager = {
   // Base URL for your API
   baseURL: "http://127.0.0.1:5001/prm-sosu-tech/us-central1/process_reminder",
+  // baseURL: "https://process-reminder-w3dy3wmx2q-uc.a.run.app",
 
   // Default headers for all requests
   defaultHeaders: {
@@ -50,6 +51,15 @@ const APIManager = {
         contactId,
         interaction,
       },
+      {
+        Authorization: `Bearer ${authToken}`,
+      }
+    ),
+  getMonthlyInteractions: (contactId, yearMonth = null, authToken) =>
+    APIManager.request(
+      `/analytics/monthly?contactId=${contactId}&yearMonth=${yearMonth}`,
+      "GET",
+      null,
       {
         Authorization: `Bearer ${authToken}`,
       }
