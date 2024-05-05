@@ -18,7 +18,13 @@ import {
   PlusCircleOutlined,
   LoadingOutlined,
 } from "@ant-design/icons";
-import { MdEmojiPeople, MdFavorite } from "react-icons/md";
+import { IoMdHappy, IoMdSad } from "react-icons/io";
+
+import {
+  MdEmojiPeople,
+  MdFavorite,
+  MdOutlineSentimentNeutral,
+} from "react-icons/md";
 import { PiHandsClappingBold } from "react-icons/pi";
 // import "a ntd/dist/antd.css";
 import StatsCard from "../../utils/StatsCard";
@@ -43,7 +49,9 @@ const readable = {
   business: "Not Personal",
   other: "Other",
 };
-
+/**
+ *
+ */
 const InteractionsPaginated = ({ contact }) => {
   const { name, phone, email, photo, id } = contact;
 
@@ -51,9 +59,122 @@ const InteractionsPaginated = ({ contact }) => {
   const [loading, setLoading] = useState(false);
 
   function generateRenderedListOfItems(interactions) {
+    const colors = {
+      blue: ["#CAF0F8", "#ADE8F4", "#90E0EF", "#48CAE4"], // Blue colors from light to medium-light
+      green: ["#d0ffd0", "#b0ffb0", "#90ff90", "#60ff60"], // Green colors from light to medium-light
+      red: ["#ffcccc", "#ffb3b3", "#ff9999", "#ff8080"], // Red colors from light to medium-light
+    };
+    var interactionTypeLanguage = {
+      messages: "Message",
+      inPerson: "In Person",
+      other: "Interaction",
+      phone: "Phone",
+    };
+    var purposeLanguage = {
+      personal: "Personal",
+      business: "Not Personal",
+    };
+    var initiatedByLanguage = {
+      contact: "They reached out",
+      me: "You reached out",
+    };
+    var sentimentLanguage = {
+      negative: "Negative",
+      positive: "Positive",
+      neutral: "Neutral",
+    };
     var list = [];
     for (var interaction of interactions) {
+      list.push(
+        <>
+          <div
+            style={{
+              backgroundColor: "#ededed",
+              display: "flex",
+              flexDirection: "row",
+              justifyContent: "space-between",
+              flex: 10,
+              borderRadius: "2%",
+            }}
+          >
+            <div
+              style={{
+                padding: "3%",
+                display: "flex",
+                flexDirection: "column",
+                textAlign: "left",
+                // flex: 5,
+              }}
+            >
+              <Text
+                style={{
+                  fontSize: "1em",
+                  fontWeight: "bold",
+                }}
+              >
+                {interactionTypeLanguage[interaction.type.channel]}
+              </Text>
+              <Text>{initiatedByLanguage[interaction.initiatedBy]}</Text>
+              <Text>{purposeLanguage[interaction.purpose]}</Text>
+            </div>
+            <div
+              style={{
+                padding: "3%",
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "space-between",
+                // flex: 5,
+                // backgroundColor: "white",
+                textAlign: "right",
+                // alignContent: "end",
+              }}
+            >
+              <div
+                style={{
+                  display: "flex",
+                  flexDirection: "row",
+                  // margin: "auto",
+                  // alignItems: "right",
+                  gap: "5%",
+                  // textAlign: "right",
+                  alignItems: "center",
+                  alignSelf: "flex-end",
+                  // justifySelf: "right",
+                  // alignSelf: "right",
+                  // backgroundColor: "red",
+                  // justifyContent: "center",
+                }}
+              >
+                <Text
+                  style={{
+                    whiteSpace: "nowrap",
+                    // textAlign: "right",
+                    // fontWeight: "bold",
+                    color:
+                      interaction.sentiment === "positive"
+                        ? "black"
+                        : interaction.sentiment === "negative"
+                        ? "black"
+                        : "black",
+                  }}
+                >
+                  {sentimentLanguage[interaction.sentiment]}
+                </Text>
+                {interaction.sentiment === "positive" ? (
+                  <IoMdHappy style={{}} size={"1.2em"} color={"86DC3D"} />
+                ) : interaction.sentiment === "negative" ? (
+                  <IoMdSad size={"1.2em"} color={"ff8080"} />
+                ) : (
+                  <MdOutlineSentimentNeutral size={"1.2em"} color={"48CAE4"} />
+                )}
+              </div>
+              <Text>{new Date(interaction.timestamp).toDateString()}</Text>
+            </div>
+          </div>
+        </>
+      );
     }
+    setListOfInteractions(list);
   }
 
   async function fetchPaginatedInteractions() {
@@ -67,6 +188,10 @@ const InteractionsPaginated = ({ contact }) => {
       authToken
     ).then((result) => {
       console.log(result);
+      var api_interactions = result.data.interactions;
+      var api_lastVisible = result.data.lastVisible;
+      LocalStorageManager.setItem("paginatedPointer", api_lastVisible || null);
+      generateRenderedListOfItems(api_interactions);
       // if (result.data.monthlyInteraction)
       //   setMonthlyInteraction(result.data.monthlyInteraction);
     });
@@ -117,7 +242,7 @@ const InteractionsPaginated = ({ contact }) => {
           indicator={<LoadingOutlined style={{ fontSize: 24 }} spin />}
         />
       )}
-      <div></div>
+      {listOfInteractions}
     </Content>
   );
 };

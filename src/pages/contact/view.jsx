@@ -94,6 +94,7 @@ const ContactPage = ({ contact, onBack }) => {
       <div style={styles.container}>
         <div style={{ width: "95%", margin: "auto" }}>
           <Analytics contact={contact} />
+          <Divider />
           <InteractionsPaginated contact={contact} />
         </div>
       </div>
@@ -105,7 +106,7 @@ export default ContactPage;
 
 const styles = {
   container: {
-    height: window.innerHeight,
+    height: "100%",
     backgroundColor: "#f3f3f3",
     // height: "fit",
     // width: "95%",
