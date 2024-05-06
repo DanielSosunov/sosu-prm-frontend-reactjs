@@ -12,6 +12,7 @@ import {
   Affix,
   Radio,
   Spin,
+  Tag,
 } from "antd";
 import {
   ArrowLeftOutlined,
@@ -57,7 +58,6 @@ const InteractionsPaginated = ({ contact }) => {
 
   const [listOfInteractions, setListOfInteractions] = useState([]);
   const [loading, setLoading] = useState(false);
-
   function generateRenderedListOfItems(interactions) {
     const colors = {
       blue: ["#CAF0F8", "#ADE8F4", "#90E0EF", "#48CAE4"], // Blue colors from light to medium-light
@@ -114,7 +114,9 @@ const InteractionsPaginated = ({ contact }) => {
               >
                 {interactionTypeLanguage[interaction.type.channel]}
               </Text>
+
               <Text>{initiatedByLanguage[interaction.initiatedBy]}</Text>
+
               <Text>{purposeLanguage[interaction.purpose]}</Text>
             </div>
             <div
@@ -123,64 +125,69 @@ const InteractionsPaginated = ({ contact }) => {
                 display: "flex",
                 flexDirection: "column",
                 justifyContent: "space-between",
-                // flex: 5,
-                // backgroundColor: "white",
                 textAlign: "right",
-                // alignContent: "end",
               }}
             >
               <div
                 style={{
                   display: "flex",
                   flexDirection: "row",
-                  // margin: "auto",
-                  // alignItems: "right",
-                  gap: "5%",
-                  // textAlign: "right",
-                  alignItems: "center",
                   alignSelf: "flex-end",
-                  // justifySelf: "right",
-                  // alignSelf: "right",
-                  // backgroundColor: "red",
-                  // justifyContent: "center",
                 }}
               >
-                <Text
-                  style={{
-                    whiteSpace: "nowrap",
-                    // textAlign: "right",
-                    // fontWeight: "bold",
-                    color:
-                      interaction.sentiment === "positive"
-                        ? "black"
-                        : interaction.sentiment === "negative"
-                        ? "black"
-                        : "black",
-                  }}
+                <Tag
+                  color={
+                    interaction.sentiment === "positive"
+                      ? "#86DC3D"
+                      : interaction.sentiment === "negative"
+                      ? "#ff8080"
+                      : "#48CAE4"
+                  }
                 >
                   {sentimentLanguage[interaction.sentiment]}
-                </Text>
-                {interaction.sentiment === "positive" ? (
-                  <IoMdHappy style={{}} size={"1.2em"} color={"86DC3D"} />
-                ) : interaction.sentiment === "negative" ? (
-                  <IoMdSad size={"1.2em"} color={"ff8080"} />
-                ) : (
-                  <MdOutlineSentimentNeutral size={"1.2em"} color={"48CAE4"} />
-                )}
+                </Tag>
               </div>
-              <Text>{new Date(interaction.timestamp).toDateString()}</Text>
+              <Tag>{new Date(interaction.timestamp).toDateString()}</Tag>
             </div>
           </div>
         </>
       );
     }
-    setListOfInteractions(list);
+    var startAfter = LocalStorageManager.getItem("paginatedPointer");
+    if (startAfter !== null && startAfter !== `null`)
+      list.push(
+        <Button
+          type="primary"
+          shape="round"
+          size={"large"}
+          loading={loading}
+          // icon={<PlusCircleOutlined />}
+          style={{
+            height: "5%",
+            margin: "auto",
+
+            zIndex: 2,
+            width: "60%",
+            // margin: "auto",
+          }}
+          onClick={async () => {
+            await fetchPaginatedInteractions();
+          }}
+        >
+          Load More
+        </Button>
+      );
+    return list;
+
+    // console.log(listOfInteractions.length);
+    // setListOfInteractions([...listOfInteractions, ...list]);
+    // console.log(listOfInteractions.length);
   }
 
   async function fetchPaginatedInteractions() {
     var startAfter = LocalStorageManager.getItem("paginatedPointer");
     var authToken = LocalStorageManager.getItem("authToken");
-
+    if (startAfter === null || startAfter === "null") startAfter = null;
     setLoading(true);
     await APIManager.getPaginatedInteractions(
       contact.id,
@@ -191,7 +198,12 @@ const InteractionsPaginated = ({ contact }) => {
       var api_interactions = result.data.interactions;
       var api_lastVisible = result.data.lastVisible;
       LocalStorageManager.setItem("paginatedPointer", api_lastVisible || null);
-      generateRenderedListOfItems(api_interactions);
+      var list = generateRenderedListOfItems(api_interactions);
+
+      setListOfInteractions((prevList) => {
+        if (prevList) prevList.pop();
+        return [...prevList, ...list];
+      });
       // if (result.data.monthlyInteraction)
       //   setMonthlyInteraction(result.data.monthlyInteraction);
     });
@@ -216,12 +228,23 @@ const InteractionsPaginated = ({ contact }) => {
         flexDirection: "column",
         gap: "1em",
         overflow: "auto",
-        //   marginBottom: "3%",
+        paddingBottom: "3%",
         scrollbarWidth: "none",
         zIndex: 9,
         opacity: loading ? 0.3 : 1,
       }}
     >
+      <Text
+        style={{
+          fontSize: "0.5em",
+          alignSelf: "end",
+          color: "gray",
+          padding: 0,
+          margin: 0,
+        }}
+      >
+        List represents all your interactions, newest to oldest.
+      </Text>
       {loading && (
         <Spin
           style={{
