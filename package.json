@@ -28,6 +28,7 @@
     "highcharts": "^11.4.0",
     "highcharts-react-official": "^3.2.1",
     "libphonenumber-js": "^1.10.59",
+    "moment": "^2.30.1",
     "react": "^18.2.0",
     "react-apexcharts": "^1.4.1",
     "react-chartjs-2": "^5.2.0",

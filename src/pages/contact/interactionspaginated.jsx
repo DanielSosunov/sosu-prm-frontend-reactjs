@@ -236,15 +236,15 @@ const InteractionsPaginated = ({ contact }) => {
     >
       <Text
         style={{
-          fontSize: "0.5em",
-          alignSelf: "end",
-          color: "gray",
-          padding: 0,
-          margin: 0,
+          fontSize: "1em",
+
+          color: "black",
+          alignSelf: "start",
         }}
       >
-        List represents all your interactions, newest to oldest.
+        All Interactions
       </Text>
+
       {loading && (
         <Spin
           style={{

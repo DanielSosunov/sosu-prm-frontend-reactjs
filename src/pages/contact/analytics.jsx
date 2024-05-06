@@ -12,7 +12,9 @@ import {
   Affix,
   Radio,
   Spin,
+  DatePicker,
 } from "antd";
+
 import {
   ArrowLeftOutlined,
   PlusCircleOutlined,
@@ -21,6 +23,7 @@ import {
 import { MdEmojiPeople, MdFavorite } from "react-icons/md";
 import { PiHandsClappingBold } from "react-icons/pi";
 // import "a ntd/dist/antd.css";
+import moment from "moment";
 import StatsCard from "../../utils/StatsCard";
 import BarChartWithTabs from "../../utils/BarChart";
 import AddInteraction from "./addinteraction";
@@ -47,6 +50,7 @@ const readable = {
 const Analytics = ({ contact }) => {
   const { name, phone, email, photo } = contact;
 
+  const [yearMonth, setYearMonth] = useState(moment());
   const [analytics, setAnalytics] = useState(null);
   const [monthlyInteraction, setMonthlyInteraction] = useState({
     totalInteractions: 0,
@@ -69,18 +73,30 @@ const Analytics = ({ contact }) => {
     },
   });
   const [loading, setLoading] = useState(false);
+  const handleDateChange = async (date, dateString) => {
+    // const formattedDate = date ? date.format("MMYYYY") : "";
+    console.log(date, dateString, date.format("MMYYYY"));
+    setYearMonth(date);
+  };
+
+  useEffect(() => {
+    console.log(`UseEffect [yearMonth]`);
+    fetchMonthlyInteractions();
+  }, [yearMonth]);
 
   async function fetchMonthlyInteractions() {
     var authToken = LocalStorageManager.getItem("authToken");
 
     setLoading(true);
-    await APIManager.getMonthlyInteractions(contact.id, null, authToken).then(
-      (result) => {
-        console.log(result);
-        if (result.data.monthlyInteraction)
-          setMonthlyInteraction(result.data.monthlyInteraction);
-      }
-    );
+    await APIManager.getMonthlyInteractions(
+      contact.id,
+      yearMonth.format("YYYY-MM"),
+      authToken
+    ).then((result) => {
+      console.log(result);
+      if (result.data.monthlyInteraction)
+        setMonthlyInteraction(result.data.monthlyInteraction);
+    });
     setLoading(false);
   }
   useEffect(() => {
@@ -169,10 +185,36 @@ const Analytics = ({ contact }) => {
       )}
       <div
         style={{
+          marginTop: "1em",
+          display: "flex",
+          flexDirection: "row",
+          justifyContent: "space-between",
+        }}
+      >
+        <Text
+          style={{
+            fontSize: "1em",
+
+            color: "black",
+            alignSelf: "start",
+          }}
+        >
+          Analytics
+        </Text>
+        <DatePicker
+          picker="month"
+          defaultValue={yearMonth}
+          format={"MM/YYYY"}
+          onChange={handleDateChange}
+        />
+      </div>
+
+      <div
+        style={{
           display: "flex",
           flexDirection: "row",
           // gap: "1em",
-          marginTop: "1em",
+
           backgroundColor: "#ededed",
           padding: "3%",
           borderRadius: "2%",
