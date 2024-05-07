@@ -14,6 +14,7 @@ import {
   Spin,
   DatePicker,
 } from "antd";
+import Calendar from "react-calendar";
 
 import {
   ArrowLeftOutlined,
@@ -31,6 +32,7 @@ import APIManager from "../../utils/APIManager";
 import LocalStorageManager from "../../utils/LocalStorageManager";
 import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
+import MonthYearPicker from "./monthyearpicker";
 const { Header, Content } = Layout;
 const { TabPane } = Tabs;
 const { Text, Title } = Typography;
@@ -50,7 +52,7 @@ const readable = {
 const Analytics = ({ contact }) => {
   const { name, phone, email, photo } = contact;
 
-  const [yearMonth, setYearMonth] = useState(moment());
+  const [yearMonth, setYearMonth] = useState(moment().format("YYYY-MM"));
   const [analytics, setAnalytics] = useState(null);
   const [monthlyInteraction, setMonthlyInteraction] = useState({
     totalInteractions: 0,
@@ -73,14 +75,9 @@ const Analytics = ({ contact }) => {
     },
   });
   const [loading, setLoading] = useState(false);
-  const handleDateChange = async (date, dateString) => {
-    // const formattedDate = date ? date.format("MMYYYY") : "";
-    console.log(date, dateString, date.format("MMYYYY"));
-    setYearMonth(date);
-  };
 
   useEffect(() => {
-    console.log(`UseEffect [yearMonth]`);
+    console.log(`UseEffect [yearMonth]`, yearMonth);
     fetchMonthlyInteractions();
   }, [yearMonth]);
 
@@ -90,12 +87,34 @@ const Analytics = ({ contact }) => {
     setLoading(true);
     await APIManager.getMonthlyInteractions(
       contact.id,
-      yearMonth.format("YYYY-MM"),
+      yearMonth,
       authToken
     ).then((result) => {
       console.log(result);
       if (result.data.monthlyInteraction)
         setMonthlyInteraction(result.data.monthlyInteraction);
+      else {
+        setMonthlyInteraction({
+          totalInteractions: 0,
+          initiatedByMe: 0,
+          initiatedByContact: 0,
+          interactionTypes: {
+            phone: 0,
+            inPerson: 0,
+            messages: 0,
+          },
+          interactionSentiments: {
+            positive: 0,
+            neutral: 0,
+            negative: 0,
+            other: 0,
+          },
+          interactionPurposes: {
+            personal: 0,
+            business: 0,
+          },
+        });
+      }
     });
     setLoading(false);
   }
@@ -145,6 +164,9 @@ const Analytics = ({ contact }) => {
     setAnalytics(data);
   }, [monthlyInteraction]);
 
+  useEffect(() => {
+    console.log("analytics useEffect", analytics);
+  }, [analytics]);
   return (
     <Content
       style={{
@@ -189,6 +211,7 @@ const Analytics = ({ contact }) => {
           display: "flex",
           flexDirection: "row",
           justifyContent: "space-between",
+          position: "relative",
         }}
       >
         <Text
@@ -201,12 +224,7 @@ const Analytics = ({ contact }) => {
         >
           Analytics
         </Text>
-        <DatePicker
-          picker="month"
-          defaultValue={yearMonth}
-          format={"MM/YYYY"}
-          onChange={handleDateChange}
-        />
+        <MonthYearPicker setYearMonth={setYearMonth} />
       </div>
 
       <div
