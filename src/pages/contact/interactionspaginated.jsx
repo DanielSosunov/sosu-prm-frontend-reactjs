@@ -39,17 +39,6 @@ const { Header, Content } = Layout;
 const { TabPane } = Tabs;
 const { Text, Title } = Typography;
 
-const readable = {
-  positive: "Positive",
-  negative: "Negative",
-  neutral: "Neutral",
-  phone: "Phone",
-  inPerson: "In Person",
-  messages: "Messages",
-  personal: "Personal",
-  business: "Not Personal",
-  other: "Other",
-};
 /**
  *
  */
@@ -65,6 +54,7 @@ const InteractionsPaginated = ({ contact }) => {
       red: ["#ffcccc", "#ffb3b3", "#ff9999", "#ff8080"], // Red colors from light to medium-light
     };
     var interactionTypeLanguage = {
+      message: "Message",
       messages: "Message",
       inPerson: "In Person",
       other: "Interaction",
@@ -154,7 +144,7 @@ const InteractionsPaginated = ({ contact }) => {
       );
     }
     var startAfter = LocalStorageManager.getItem("paginatedPointer");
-    if (startAfter !== null && startAfter !== `null`)
+    if (startAfter !== null && startAfter !== `null`) {
       list.push(
         <Button
           type="primary"
@@ -164,10 +154,12 @@ const InteractionsPaginated = ({ contact }) => {
           // icon={<PlusCircleOutlined />}
           style={{
             height: "5%",
-            margin: "auto",
-
+            // margin: "auto",
+            // alignSelf: "left",
+            // backgroundColor: "white",
+            // color: "black",
             zIndex: 2,
-            width: "60%",
+            width: "30%",
             // margin: "auto",
           }}
           onClick={async () => {
@@ -177,6 +169,34 @@ const InteractionsPaginated = ({ contact }) => {
           Load More
         </Button>
       );
+    } else {
+      list.push(
+        <Button
+          type="primary"
+          shape="round"
+          size={"large"}
+          loading={loading}
+          // icon={<PlusCircleOutlined />}
+          style={{
+            height: "5%",
+            // margin: "auto",
+            // alignSelf: "left",
+            // backgroundColor: "white",
+            // color: "black",
+            zIndex: 2,
+            opacity: 0,
+            width: "30%",
+            // margin: "auto",
+          }}
+          disabled
+          onClick={async () => {
+            await fetchPaginatedInteractions();
+          }}
+        >
+          Load More
+        </Button>
+      );
+    }
     return list;
 
     // console.log(listOfInteractions.length);
@@ -228,7 +248,7 @@ const InteractionsPaginated = ({ contact }) => {
         flexDirection: "column",
         gap: "1em",
         overflow: "auto",
-        paddingBottom: "3%",
+        paddingBottom: "4%",
         scrollbarWidth: "none",
         zIndex: 9,
         opacity: loading ? 0.3 : 1,

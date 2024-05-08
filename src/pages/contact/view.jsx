@@ -33,18 +33,6 @@ const { Header, Content } = Layout;
 const { TabPane } = Tabs;
 const { Text, Title } = Typography;
 
-const readable = {
-  positive: "Positive",
-  negative: "Negative",
-  neutral: "Neutral",
-  phone: "Phone",
-  inPerson: "In Person",
-  messages: "Messages",
-  personal: "Personal",
-  business: "Not Personal",
-  other: "Other",
-};
-
 const ContactPage = ({ contact, onBack }) => {
   const { name, phone, email, photo } = contact;
 
@@ -92,6 +80,26 @@ const ContactPage = ({ contact, onBack }) => {
         </div>
       </Affix>
 
+      <Button
+        type="primary"
+        shape="round"
+        size={"large"}
+        icon={<PlusCircleOutlined />}
+        style={{
+          position: "fixed",
+          bottom: "3%",
+          width: "30%",
+          // height: "5%",
+          right: "2.5%",
+          // margin: "auto",
+          zIndex: 3,
+        }}
+        onClick={() => {
+          setInteractionMode(true);
+        }}
+      >
+        Add Interaction
+      </Button>
       <div style={styles.container}>
         <div style={{ width: "95%", margin: "auto", zIndex: 1 }}>
           <Analytics contact={contact} />

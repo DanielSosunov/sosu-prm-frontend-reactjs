@@ -74,14 +74,14 @@ const AddInteraction = (props) => {
     neutral: "Neutral",
     phone: "Phone",
     inPerson: "In Person",
-    messages: "Messages",
+    message: "Message",
     personal: "Personal",
     business: "Not Personal",
     other: "other",
     initiatedByMe: "I contacted " + props.contact.name,
     initiatedByContact: props.contact.name + " contacted me",
   };
-  var typeOptions = ["phone", "inPerson", "messages", "other"];
+  var typeOptions = ["phone", "inPerson", "message", "other"];
   var purposeOptions = ["personal", "business"];
   var sentimentOptions = ["positive", "neutral", "negative"];
   var whoOptions = ["initiatedByMe", "initiatedByContact"];
@@ -189,7 +189,7 @@ const AddInteraction = (props) => {
             );
             console.log(interaction);
             setLoading(false);
-            // setInteractionMode(true);
+            props.setInteractionMode(false);
           }}
         >
           Save Interaction

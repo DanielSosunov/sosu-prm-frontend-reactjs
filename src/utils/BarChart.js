@@ -96,7 +96,7 @@ const BarChart = ({ data, colorType, title }) => {
           // Display the value and the numb variable
           const { dataIndex } = context;
           const numb = data[dataIndex].numb;
-          return `${numb} times (${value}%)`; // Adjusted label format
+          return `${numb} times (${value.toFixed(2)}%)`; // Adjusted label format
         },
         color: "#000", // Set the color of the datalabels text
         font: {

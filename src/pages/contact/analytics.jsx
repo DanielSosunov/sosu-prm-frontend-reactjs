@@ -120,7 +120,6 @@ const Analytics = ({ contact }) => {
   }
   useEffect(() => {
     console.log(`UseEffect:[monthlyInteraction]`, monthlyInteraction);
-    if (!analytics) fetchMonthlyInteractions();
 
     const sentiment = Object.keys(monthlyInteraction.interactionSentiments).map(
       (sentiment) => {
@@ -164,14 +163,12 @@ const Analytics = ({ contact }) => {
     setAnalytics(data);
   }, [monthlyInteraction]);
 
-  useEffect(() => {
-    console.log("analytics useEffect", analytics);
-  }, [analytics]);
   return (
     <Content
       style={{
         // width: "95%",
         // margin: "auto",
+        height: "100%",
         position: "relative",
         //   backgroundColor: "red",
         //   margin: "auto",
@@ -205,6 +202,7 @@ const Analytics = ({ contact }) => {
           indicator={<LoadingOutlined style={{ fontSize: 24 }} spin />}
         />
       )}
+
       <div
         style={{
           marginTop: "1em",
@@ -232,7 +230,7 @@ const Analytics = ({ contact }) => {
           display: "flex",
           flexDirection: "row",
           // gap: "1em",
-
+          height: "100%",
           backgroundColor: "#ededed",
           padding: "3%",
           borderRadius: "2%",
@@ -252,9 +250,15 @@ const Analytics = ({ contact }) => {
         />
 
         <Divider
-          type="vertical"
+          type={"vertical"}
           style={{
-            height: "100%",
+            alignSelf: "center",
+            height: window.innerWidth * 0.1,
+            // height: "100%",
+            // zIndex: 1,
+            // color: "black",
+            // height: "100%",
+            // width: "1px",
           }}
         />
         <StatsCard

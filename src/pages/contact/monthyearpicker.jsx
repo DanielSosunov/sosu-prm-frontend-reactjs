@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Button,
   Tabs,
@@ -21,8 +21,10 @@ const { Text, Title } = Typography;
 
 const MonthYearPicker = (props) => {
   const today = new Date();
+  const [displayYear, setDisplayYear] = useState(today.getFullYear());
+  const [displayMonth, setDisplayMonth] = useState(today.getMonth() + 1); // JavaScript months are 0-indexed
   const [year, setYear] = useState(today.getFullYear());
-  const [month, setMonth] = useState(today.getMonth() + 1); // JavaScript months are 0-indexed
+  const [month, setMonth] = useState(today.getMonth() + 1);
   const [isOpen, setIsOpen] = useState(false);
 
   const months = [
@@ -51,6 +53,12 @@ const MonthYearPicker = (props) => {
     setIsOpen(!isOpen);
   };
 
+  useEffect(() => {
+    if (props.setYearMonth)
+      props.setYearMonth(
+        moment(`${months[displayMonth - 1]}, ${displayYear}`).format("YYYY-MM")
+      );
+  }, []);
   return (
     <div style={{ width: "25%" }}>
       <div
@@ -68,8 +76,8 @@ const MonthYearPicker = (props) => {
         onClick={togglePopup}
       >
         <Text style={{ alignSelf: "center", marginRight: "5%" }}>{`${
-          months[month - 1]
-        }, ${year}`}</Text>
+          months[displayMonth - 1]
+        }, ${displayYear}`}</Text>
         <FaRegCalendarAlt size={"1em"} style={{ alignSelf: "center" }} />
       </div>
       {isOpen && (
@@ -104,7 +112,14 @@ const MonthYearPicker = (props) => {
             <FaAngleRight size={"1.5em"} onClick={incrementYear}></FaAngleRight>
           </div>
           <select
-            style={{ marginBottom: "3%", marginLeft: "5%", marginRight: "5%" }}
+            style={{
+              height: "3em",
+              marginBottom: "3%",
+              marginLeft: "5%",
+              marginRight: "5%",
+              paddingLeft: "2%",
+              paddingRight: "2%",
+            }}
             value={month}
             onChange={handleMonthChange}
           >
@@ -132,6 +147,8 @@ const MonthYearPicker = (props) => {
                 props.setYearMonth(
                   moment(`${months[month - 1]}, ${year}`).format("YYYY-MM")
                 );
+              setDisplayMonth(month);
+              setDisplayYear(year);
               togglePopup();
             }}
           >
