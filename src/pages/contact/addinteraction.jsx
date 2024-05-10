@@ -10,6 +10,7 @@ import {
   Segmented,
   Divider,
   Affix,
+  Input,
   Radio,
 } from "antd";
 
@@ -91,6 +92,7 @@ const AddInteraction = (props) => {
   const [purpose, setPurpose] = useState("personal");
   const [sentiment, setSentiment] = useState("positive");
   const [who, setWho] = useState("initiatedByMe");
+  const [diary, setDiary] = useState("");
 
   return (
     <div
@@ -156,6 +158,8 @@ const AddInteraction = (props) => {
           margin: "auto",
           display: "flex",
           flexDirection: "column",
+          overflow: "auto",
+          backgroundColor: "#f5f5f5",
         }}
       >
         <Button
@@ -165,9 +169,10 @@ const AddInteraction = (props) => {
           icon={<CheckCircleOutlined />}
           loading={loading}
           style={{
-            position: "absolute",
+            position: "fixed",
             bottom: "3%",
             width: "95%",
+            zIndex: 2,
             // margin: "auto",
           }}
           onClick={async () => {
@@ -260,6 +265,43 @@ const AddInteraction = (props) => {
           current={sentiment}
           setCurrent={setSentiment}
         />
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "row",
+            justifyContent: "space-between",
+            alignItems: "center",
+          }}
+        >
+          <Text
+            style={{
+              fontSize: "1.2em",
+              fontWeight: "bolder",
+              marginTop: "4%",
+              marginBottom: "2%",
+            }}
+          >
+            Personal Diary Entry
+          </Text>
+          <div style={{}}>{diary.length} / 500</div>
+        </div>
+
+        <Input.TextArea
+          maxLength={500}
+          style={{
+            // paddingTop: "5%",
+            height: "300px",
+            fontSize: "16px",
+            marginBottom: "15%",
+            // whiteSpace: "wrap",
+            // backgroundColor: "red",
+            // whiteSpace: "nowrap",
+          }}
+          value={diary}
+          onChange={(e) => {
+            setDiary(e.target.value);
+          }}
+        ></Input.TextArea>
       </div>
     </div>
   );

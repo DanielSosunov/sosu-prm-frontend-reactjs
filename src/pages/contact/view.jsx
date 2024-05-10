@@ -105,6 +105,7 @@ const ContactPage = ({ contact, onBack }) => {
               alignSelf: "center",
               // width: "30%",
               // height: "5%",
+              // height: "10px",
               right: "2.5%",
               // margin: "auto",
               zIndex: 3,
