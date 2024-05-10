@@ -154,9 +154,10 @@ const InteractionsPaginated = ({ contact }) => {
           // icon={<PlusCircleOutlined />}
           style={{
             height: "5%",
-            // margin: "auto",
+            margin: "auto",
             // alignSelf: "left",
-            // backgroundColor: "white",
+            // border: "1px solid #000",
+            // backgroundColor: "#ededed",
             // color: "black",
             zIndex: 2,
             width: "30%",
@@ -181,7 +182,7 @@ const InteractionsPaginated = ({ contact }) => {
             height: "5%",
             // margin: "auto",
             // alignSelf: "left",
-            // backgroundColor: "white",
+            // color: "#EdEdEd",
             // color: "black",
             zIndex: 2,
             opacity: 0,

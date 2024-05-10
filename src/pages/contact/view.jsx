@@ -45,61 +45,79 @@ const ContactPage = ({ contact, onBack }) => {
       <Affix offsetTop={0}>
         <div
           style={{
-            backgroundColor: "white",
-            width: "100%",
             display: "flex",
             flexDirection: "row",
-            justifyContent: "center",
-            height: 60,
+            width: "100%",
+            backgroundColor: "white",
           }}
         >
-          <ArrowLeftOutlined
-            style={{
-              position: "absolute",
-              left: "3%",
-              alignSelf: "center",
-              //   backgroundColor: "green",
-              fontSize: "16px",
-            }}
-          />
-
-          <Avatar src={photo} size={40} style={styles.photo} />
           <div
             style={{
+              backgroundColor: "white",
+              width: "100%",
               display: "flex",
-              flexDirection: "column",
-              marginLeft: "1%",
-              marginTop: "1%",
-              marginBottom: "1%",
-              justifyContent: "center",
+              flexDirection: "row",
+              marginLeft: "3%",
+              // justifyContent: "center",
+              height: 60,
             }}
           >
-            <Text style={styles.titleText}>{name}</Text>
-            <Text style={styles.subtitleText}>{phone}</Text>
+            <ArrowLeftOutlined
+              style={{
+                // position: "absolute",
+                marginRight: "3%",
+                alignSelf: "center",
+                //   backgroundColor: "green",
+                fontSize: "16px",
+              }}
+            />
+
+            <Avatar
+              src={photo}
+              size={40}
+              style={{ ...styles.photo, marginRight: "2%" }}
+            />
+            <div
+              style={{
+                // paddingLeft: "3%",
+
+                display: "flex",
+                flexDirection: "column",
+                marginLeft: "1%",
+                marginTop: "1%",
+                marginBottom: "1%",
+                justifyContent: "center",
+              }}
+            >
+              <Text style={styles.titleText}>{name}</Text>
+              <Text style={styles.subtitleText}>{phone}</Text>
+            </div>
           </div>
+          <Button
+            type="primary"
+            shape="round"
+            size={"large"}
+            icon={<PlusCircleOutlined />}
+            style={{
+              // position: "fixed",
+              // bottom: "3%",
+              justifySelf: "end",
+              alignSelf: "center",
+              // width: "30%",
+              // height: "5%",
+              right: "2.5%",
+              // margin: "auto",
+              zIndex: 3,
+            }}
+            onClick={() => {
+              setInteractionMode(true);
+            }}
+          >
+            Add Interaction
+          </Button>
         </div>
       </Affix>
 
-      <Button
-        type="primary"
-        shape="round"
-        size={"large"}
-        icon={<PlusCircleOutlined />}
-        style={{
-          position: "fixed",
-          bottom: "3%",
-          width: "30%",
-          // height: "5%",
-          right: "2.5%",
-          // margin: "auto",
-          zIndex: 3,
-        }}
-        onClick={() => {
-          setInteractionMode(true);
-        }}
-      >
-        Add Interaction
-      </Button>
       <div style={styles.container}>
         <div style={{ width: "95%", margin: "auto", zIndex: 1 }}>
           <Analytics contact={contact} />
