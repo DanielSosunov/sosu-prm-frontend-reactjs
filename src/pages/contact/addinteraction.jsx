@@ -46,7 +46,9 @@ const ButtonRow = (props) => {
         justifyContent: "space-around", // Distribute space evenly around items
         flexWrap: "nowrap", // Prevent wrapping
         maxWidth: "100%", // Container takes full width
+        width: "95%",
         gap: "1em",
+        margin: "auto",
       }}
     >
       {props.options.map((option) => (
@@ -154,7 +156,7 @@ const AddInteraction = (props) => {
 
       <div
         style={{
-          width: "95%",
+          width: "100%",
           margin: "auto",
           display: "flex",
           flexDirection: "column",
@@ -173,7 +175,7 @@ const AddInteraction = (props) => {
             bottom: "3%",
             width: "95%",
             zIndex: 2,
-            // margin: "auto",
+            marginLeft: "2.5%",
           }}
           onClick={async () => {
             setLoading(true);
@@ -204,6 +206,9 @@ const AddInteraction = (props) => {
             fontSize: "1.2em",
             fontWeight: "bolder",
             marginBottom: "2%",
+            width: "95%",
+            marginLeft: "auto",
+            marginRight: "auto",
           }}
         >
           Who Contacted Who
@@ -221,6 +226,9 @@ const AddInteraction = (props) => {
             fontWeight: "bolder",
             marginBottom: "2%",
             marginTop: "4%",
+            width: "95%",
+            marginLeft: "auto",
+            marginRight: "auto",
           }}
         >
           How did you guys interact?
@@ -238,6 +246,9 @@ const AddInteraction = (props) => {
             fontWeight: "bolder",
             marginBottom: "2%",
             marginTop: "4%",
+            width: "95%",
+            marginLeft: "auto",
+            marginRight: "auto",
           }}
         >
           What was the purpose?
@@ -255,6 +266,9 @@ const AddInteraction = (props) => {
             fontWeight: "bolder",
             marginTop: "4%",
             marginBottom: "2%",
+            width: "95%",
+            marginLeft: "auto",
+            marginRight: "auto",
           }}
         >
           How did you feel?
@@ -271,6 +285,9 @@ const AddInteraction = (props) => {
             flexDirection: "row",
             justifyContent: "space-between",
             alignItems: "center",
+            width: "95%",
+            marginLeft: "auto",
+            marginRight: "auto",
           }}
         >
           <Text
@@ -293,6 +310,10 @@ const AddInteraction = (props) => {
             height: "300px",
             fontSize: "16px",
             marginBottom: "15%",
+            resize: "none",
+            width: "95%",
+            marginLeft: "auto",
+            marginRight: "auto",
             // whiteSpace: "wrap",
             // backgroundColor: "red",
             // whiteSpace: "nowrap",
