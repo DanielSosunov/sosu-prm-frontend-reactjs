@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import {
   Button,
   Tabs,
@@ -95,6 +95,14 @@ const AddInteraction = (props) => {
   const [sentiment, setSentiment] = useState("positive");
   const [who, setWho] = useState("initiatedByMe");
   const [diary, setDiary] = useState("");
+  const saveButton = useRef(null);
+  const [saveButtonBottom, setSaveButtonBottom] = useState("3%");
+
+  useEffect(() => {
+    if (saveButton.current) {
+      setSaveButtonBottom(saveButton.current.clientHeight);
+    }
+  }, []);
 
   return (
     <div
@@ -165,6 +173,7 @@ const AddInteraction = (props) => {
         }}
       >
         <Button
+          ref={saveButton}
           type="primary"
           shape="round"
           size={"large"}
@@ -309,7 +318,7 @@ const AddInteraction = (props) => {
             // paddingTop: "5%",
             height: "300px",
             fontSize: "16px",
-            marginBottom: "15%",
+            marginBottom: saveButtonBottom * 2,
             resize: "none",
             width: "95%",
             marginLeft: "auto",

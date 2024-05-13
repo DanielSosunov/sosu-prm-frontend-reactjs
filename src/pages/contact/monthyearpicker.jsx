@@ -64,11 +64,11 @@ const MonthYearPicker = (props) => {
       <div
         style={{
           backgroundColor: "white",
-          border: "none",
           padding: "5%",
           //   alignItems: "center",
           whiteSpace: "nowrap",
-          borderRadius: "2%",
+          borderRadius: "20px",
+          border: "1px solid #ededed",
           display: "flex",
           flexDirection: "row",
           justifyContent: "center",
@@ -135,7 +135,7 @@ const MonthYearPicker = (props) => {
             size={"small"}
             // icon={<PlusCircleOutlined />}
             style={{
-              height: "5%",
+              height: "40px",
               marginLeft: "5%",
               marginBottom: "3%",
               zIndex: 2,

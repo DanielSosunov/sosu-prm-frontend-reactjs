@@ -80,7 +80,7 @@ const ContactPage = ({ contact, onBack }) => {
             <div
               style={{
                 // paddingLeft: "3%",
-
+                // backgroundColor: "green",
                 display: "flex",
                 flexDirection: "column",
                 marginLeft: "1%",
@@ -176,9 +176,11 @@ const styles = {
     fontWeight: "bold",
     color: "#333",
     textAlign: "left",
+    lineHeight: 1,
   },
   subtitleText: {
-    fontSize: "14px",
+    fontSize: "12px",
     color: "#666",
+    lineHeight: 1,
   },
 };
