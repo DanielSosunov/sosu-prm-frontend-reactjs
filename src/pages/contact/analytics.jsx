@@ -217,7 +217,7 @@ const Analytics = ({ contact }) => {
             fontSize: "1em",
 
             color: "black",
-            alignSelf: "start",
+            alignSelf: "center",
           }}
         >
           Analytics

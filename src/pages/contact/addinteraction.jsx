@@ -189,6 +189,7 @@ const AddInteraction = (props) => {
           onClick={async () => {
             setLoading(true);
             var authToken = LocalStorageManager.getItem("authToken");
+            var apiDiary = diary === "" ? null : diary;
             var interaction = await APIManager.addInteraction(
               props.contact,
               props.contact.id || null,
@@ -201,6 +202,7 @@ const AddInteraction = (props) => {
                 purpose: purpose,
                 sentiment: sentiment,
               },
+              apiDiary,
               authToken
             );
             console.log(interaction);

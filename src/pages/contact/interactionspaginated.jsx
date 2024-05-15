@@ -96,14 +96,26 @@ const InteractionsPaginated = ({ contact }) => {
                 // flex: 5,
               }}
             >
-              <Text
+              <div
                 style={{
-                  fontSize: "1em",
-                  fontWeight: "bold",
+                  display: "flex",
+                  flexDirection: "row",
+                  alignItems: "center",
                 }}
               >
-                {interactionTypeLanguage[interaction.type.channel]}
-              </Text>
+                <Text
+                  style={{
+                    fontSize: "1em",
+                    fontWeight: "bold",
+                  }}
+                >
+                  {interactionTypeLanguage[interaction.type.channel]}
+                </Text>
+                <div style={{ marginLeft: "2px", marginRight: "2px" }} />
+                <Text style={{ fontSize: "0.7em", fontWeight: "regular" }}>
+                  • {new Date(interaction.timestamp).toDateString()}
+                </Text>
+              </div>
 
               <Text>{initiatedByLanguage[interaction.initiatedBy]}</Text>
 
@@ -137,7 +149,6 @@ const InteractionsPaginated = ({ contact }) => {
                   {sentimentLanguage[interaction.sentiment]}
                 </Tag>
               </div>
-              <Tag>{new Date(interaction.timestamp).toDateString()}</Tag>
             </div>
           </div>
         </>
