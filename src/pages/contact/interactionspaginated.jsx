@@ -35,6 +35,7 @@ import APIManager from "../../utils/APIManager";
 import LocalStorageManager from "../../utils/LocalStorageManager";
 import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
+import PaginatedElement from "./paginatedelement";
 const { Header, Content } = Layout;
 const { TabPane } = Tabs;
 const { Text, Title } = Typography;
@@ -47,112 +48,13 @@ const InteractionsPaginated = ({ contact }) => {
 
   const [listOfInteractions, setListOfInteractions] = useState([]);
   const [loading, setLoading] = useState(false);
+
   function generateRenderedListOfItems(interactions) {
-    const colors = {
-      blue: ["#CAF0F8", "#ADE8F4", "#90E0EF", "#48CAE4"], // Blue colors from light to medium-light
-      green: ["#d0ffd0", "#b0ffb0", "#90ff90", "#60ff60"], // Green colors from light to medium-light
-      red: ["#ffcccc", "#ffb3b3", "#ff9999", "#ff8080"], // Red colors from light to medium-light
-    };
-    var interactionTypeLanguage = {
-      message: "Message",
-      messages: "Message",
-      inPerson: "In Person",
-      other: "Interaction",
-      phone: "Phone",
-    };
-    var purposeLanguage = {
-      personal: "Personal",
-      business: "Not Personal",
-    };
-    var initiatedByLanguage = {
-      contact: "They reached out",
-      me: "You reached out",
-    };
-    var sentimentLanguage = {
-      negative: "Negative",
-      positive: "Positive",
-      neutral: "Neutral",
-    };
     var list = [];
-    for (var interaction of interactions) {
-      list.push(
-        <>
-          <div
-            style={{
-              backgroundColor: "#ededed",
-              display: "flex",
-              flexDirection: "row",
-              justifyContent: "space-between",
-              flex: 10,
-              borderRadius: "2%",
-            }}
-          >
-            <div
-              style={{
-                padding: "3%",
-                display: "flex",
-                flexDirection: "column",
-                textAlign: "left",
-                // flex: 5,
-              }}
-            >
-              <div
-                style={{
-                  display: "flex",
-                  flexDirection: "row",
-                  alignItems: "center",
-                }}
-              >
-                <Text
-                  style={{
-                    fontSize: "1em",
-                    fontWeight: "bold",
-                  }}
-                >
-                  {interactionTypeLanguage[interaction.type.channel]}
-                </Text>
-                <div style={{ marginLeft: "2px", marginRight: "2px" }} />
-                <Text style={{ fontSize: "0.7em", fontWeight: "regular" }}>
-                  • {new Date(interaction.timestamp).toDateString()}
-                </Text>
-              </div>
-
-              <Text>{initiatedByLanguage[interaction.initiatedBy]}</Text>
-
-              <Text>{purposeLanguage[interaction.purpose]}</Text>
-            </div>
-            <div
-              style={{
-                padding: "3%",
-                display: "flex",
-                flexDirection: "column",
-                justifyContent: "space-between",
-                textAlign: "right",
-              }}
-            >
-              <div
-                style={{
-                  display: "flex",
-                  flexDirection: "row",
-                  alignSelf: "flex-end",
-                }}
-              >
-                <Tag
-                  color={
-                    interaction.sentiment === "positive"
-                      ? "#86DC3D"
-                      : interaction.sentiment === "negative"
-                      ? "#ff8080"
-                      : "#48CAE4"
-                  }
-                >
-                  {sentimentLanguage[interaction.sentiment]}
-                </Tag>
-              </div>
-            </div>
-          </div>
-        </>
-      );
+    for (var i = 0; i < interactions.length; i++) {
+      var interaction = interactions[i];
+      console.log(interaction);
+      list.push(<PaginatedElement interaction={interaction} />);
     }
     var startAfter = LocalStorageManager.getItem("paginatedPointer");
     if (startAfter !== null && startAfter !== `null`) {
