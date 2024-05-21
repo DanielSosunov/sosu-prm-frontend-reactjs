@@ -42,6 +42,9 @@ const PaginatedElement = (props) => {
           //   width: "100%",
           padding: "3%",
         }}
+        onClick={(event) => {
+          if (props.interaction.diary) setDiaryView(!diaryView);
+        }}
       >
         <div
           style={{
@@ -119,7 +122,9 @@ const PaginatedElement = (props) => {
                 style={{
                   fontSize: "0.8em",
                   padding: 4,
-                  borderRadius: 2,
+                  borderRadius: "5px",
+                  //   border: "1px solid #f3f3f3",
+
                   color: "white",
                   backgroundColor:
                     props.interaction.sentiment === "positive"
@@ -137,11 +142,9 @@ const PaginatedElement = (props) => {
                 style={{
                   fontSize: "0.8em",
                   backgroundColor: "white",
-                  borderRadius: 2,
+                  border: "1px solid #f3f3f3",
+                  borderRadius: "5px",
                   padding: 4,
-                }}
-                onClick={(event) => {
-                  setDiaryView(!diaryView);
                 }}
               >
                 {diaryView ? "Click to hide diary" : "Click to view diary"}

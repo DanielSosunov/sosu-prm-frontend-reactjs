@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import {
   Button,
   Tabs,
@@ -26,7 +26,7 @@ const MonthYearPicker = (props) => {
   const [year, setYear] = useState(today.getFullYear());
   const [month, setMonth] = useState(today.getMonth() + 1);
   const [isOpen, setIsOpen] = useState(false);
-
+  const selectMenu = useRef(null);
   const months = [
     "January",
     "February",
@@ -67,7 +67,7 @@ const MonthYearPicker = (props) => {
           padding: "5%",
           //   alignItems: "center",
           whiteSpace: "nowrap",
-          borderRadius: "20px",
+          borderRadius: "5px",
           border: "1px solid #ededed",
           display: "flex",
           flexDirection: "row",
@@ -105,30 +105,54 @@ const MonthYearPicker = (props) => {
               marginRight: "5%",
               justifyContent: "space-between",
               alignItems: "center",
+              width: "90%",
             }}
           >
             <FaAngleLeft size={"1.5em"} onClick={decrementYear}></FaAngleLeft>
             <span>{year}</span>
             <FaAngleRight size={"1.5em"} onClick={incrementYear}></FaAngleRight>
           </div>
-          <select
+          <div
             style={{
-              height: "3em",
-              marginBottom: "3%",
-              marginLeft: "5%",
-              marginRight: "5%",
-              paddingLeft: "2%",
-              paddingRight: "2%",
+              width: "90%",
+              display: "flex",
+              margin: "auto",
+              alignContent: "center",
+              // padding: "2%",
+              marginBottom: "2%",
+              // position: "relative",
             }}
-            value={month}
-            onChange={handleMonthChange}
+            onClick={() => {
+              if (selectMenu.current) selectMenu.current.focus();
+            }}
           >
-            {months.map((name, index) => (
-              <option key={name} value={index + 1}>
-                {name}
-              </option>
-            ))}
-          </select>
+            <select
+              ref={selectMenu}
+              style={{
+                // backgroundColor: "red",
+                // position: "absolute",
+                // top: 0,
+                // left: 0,
+                height: "100%",
+                // padding: "2%",
+                width: "100%",
+                borderRadius: "5px",
+                padding: "2%",
+                border: "1px solid #d3d3d3",
+                // paddingLeft: "2%",
+                // paddingRight: "2%",
+              }}
+              value={month}
+              onChange={handleMonthChange}
+            >
+              {months.map((name, index) => (
+                <option key={name} value={index + 1}>
+                  {name}
+                </option>
+              ))}
+            </select>
+          </div>
+
           <Button
             type="primary"
             shape="round"
