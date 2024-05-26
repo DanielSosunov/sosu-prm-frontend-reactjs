@@ -90,7 +90,7 @@ const MonthYearPicker = (props) => {
             right: 0,
             backgroundColor: "white",
             // padding: "2%",
-            borderRadius: "2%",
+            borderRadius: "5px",
 
             marginTop: "2%",
           }}

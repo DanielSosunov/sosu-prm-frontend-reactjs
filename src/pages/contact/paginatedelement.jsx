@@ -141,8 +141,10 @@ const PaginatedElement = (props) => {
               <div
                 style={{
                   fontSize: "0.8em",
+                  //   backgroundColor: "#1578FE",
+                  //   color: "white",
                   backgroundColor: "white",
-                  border: "1px solid #f3f3f3",
+                  //   border: "1px solid #f3f3f3",
                   borderRadius: "5px",
                   padding: 4,
                 }}

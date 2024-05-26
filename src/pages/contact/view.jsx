@@ -23,22 +23,40 @@ import { PiHandsClappingBold } from "react-icons/pi";
 // import "a ntd/dist/antd.css";
 import StatsCard from "../../utils/StatsCard";
 import BarChartWithTabs from "../../utils/BarChart";
-import AddInteraction from "./addinteraction";
+import AddInteraction from "../addinteraction/addinteraction";
 import Analytics from "./analytics";
 import APIManager from "../../utils/APIManager";
 import LocalStorageManager from "../../utils/LocalStorageManager";
 import InteractionsPaginated from "./interactionspaginated";
+import { useNavigate, useSearchParams } from "react-router-dom";
 
 const { Header, Content } = Layout;
 const { TabPane } = Tabs;
 const { Text, Title } = Typography;
 
-const ContactPage = ({ contact, onBack }) => {
-  const { name, phone, email, photo } = contact;
-
+const ContactPage = (props) => {
+  // const { name, phone, email, photo } = contact;
+  const [contact, setContact] = useState(null);
   const [interactionMode, setInteractionMode] = useState(false);
+  const [searchParams, setSearchParams] = useSearchParams();
+  const navigate = useNavigate();
 
-  return interactionMode ? (
+  async function getAndSetContact(contactId) {
+    var authToken = LocalStorageManager.getItem("authToken");
+
+    var apiContact = await APIManager.getContactById(contactId, authToken);
+    setContact(apiContact.data.contact);
+  }
+
+  useEffect(() => {
+    var contactId = searchParams.get(`contactId`);
+    if (contactId) {
+      getAndSetContact(contactId);
+    }
+  }, []);
+  return contact == null ? (
+    <></>
+  ) : interactionMode ? (
     <AddInteraction contact={contact} setInteractionMode={setInteractionMode} />
   ) : (
     <div>
@@ -72,11 +90,11 @@ const ContactPage = ({ contact, onBack }) => {
               }}
             />
 
-            <Avatar
-              src={photo}
+            {/* <Avatar
+              src={contact.photo}
               size={40}
               style={{ ...styles.photo, marginRight: "2%" }}
-            />
+            /> */}
             <div
               style={{
                 // paddingLeft: "3%",
@@ -87,10 +105,11 @@ const ContactPage = ({ contact, onBack }) => {
                 marginTop: "1%",
                 marginBottom: "1%",
                 justifyContent: "center",
+                gap: 2,
               }}
             >
-              <Text style={styles.titleText}>{name}</Text>
-              <Text style={styles.subtitleText}>{phone}</Text>
+              <Text style={styles.titleText}>{contact.name}</Text>
+              <Text style={styles.subtitleText}>{contact.phone}</Text>
             </div>
           </div>
           <Button
@@ -111,7 +130,7 @@ const ContactPage = ({ contact, onBack }) => {
               zIndex: 3,
             }}
             onClick={() => {
-              setInteractionMode(true);
+              navigate("/addinteraction?contactId=" + contact.id);
             }}
           >
             Add Interaction

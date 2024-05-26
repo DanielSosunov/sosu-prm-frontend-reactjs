@@ -27,7 +27,7 @@ import { PiHandsClappingBold } from "react-icons/pi";
 import moment from "moment";
 import StatsCard from "../../utils/StatsCard";
 import BarChartWithTabs from "../../utils/BarChart";
-import AddInteraction from "./addinteraction";
+import AddInteraction from "../addinteraction/addinteraction";
 import APIManager from "../../utils/APIManager";
 import LocalStorageManager from "../../utils/LocalStorageManager";
 import Skeleton, { SkeletonTheme } from "react-loading-skeleton";

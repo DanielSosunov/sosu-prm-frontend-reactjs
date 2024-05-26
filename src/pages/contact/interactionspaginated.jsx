@@ -30,7 +30,7 @@ import { PiHandsClappingBold } from "react-icons/pi";
 // import "a ntd/dist/antd.css";
 import StatsCard from "../../utils/StatsCard";
 import BarChartWithTabs from "../../utils/BarChart";
-import AddInteraction from "./addinteraction";
+import AddInteraction from "../addinteraction/addinteraction";
 import APIManager from "../../utils/APIManager";
 import LocalStorageManager from "../../utils/LocalStorageManager";
 import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
@@ -44,8 +44,6 @@ const { Text, Title } = Typography;
  *
  */
 const InteractionsPaginated = ({ contact }) => {
-  const { name, phone, email, photo, id } = contact;
-
   const [listOfInteractions, setListOfInteractions] = useState([]);
   const [loading, setLoading] = useState(false);
 

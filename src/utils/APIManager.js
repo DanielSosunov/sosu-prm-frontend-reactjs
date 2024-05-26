@@ -2,8 +2,8 @@
 
 const APIManager = {
   // Base URL for your API
-  // baseURL: "http://127.0.0.1:5001/prm-sosu-tech/us-central1/process_reminder",
-  baseURL: "https://process-reminder-w3dy3wmx2q-uc.a.run.app",
+  baseURL: "http://127.0.0.1:5001/prm-sosu-tech/us-central1/process_reminder",
+  // baseURL: "https://process-reminder-w3dy3wmx2q-uc.a.run.app",
 
   // Default headers for all requests
   defaultHeaders: {
@@ -66,8 +66,15 @@ const APIManager = {
       }
     ),
   getPaginatedInteractions: async (contactId, startAfter, authToken) => {
-    var url = `/interaction/paginated?contactId=${contactId}`;
+    var url = `/interaction/paginated?`;
+    if (contactId) url += `contactId=${contactId}`;
     if (startAfter) url += `&startAfter=${startAfter}`;
+    return APIManager.request(url, "GET", null, {
+      Authorization: `Bearer ${authToken}`,
+    });
+  },
+  getContactById: async (contactId, authToken) => {
+    var url = `/contact/` + contactId;
     return APIManager.request(url, "GET", null, {
       Authorization: `Bearer ${authToken}`,
     });

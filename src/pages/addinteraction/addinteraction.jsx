@@ -26,6 +26,7 @@ import StatsCard from "../../utils/StatsCard";
 import BarChartWithTabs from "../../utils/BarChart";
 import APIManager from "../../utils/APIManager";
 import LocalStorageManager from "../../utils/LocalStorageManager";
+import { useNavigate, useSearchParams } from "react-router-dom";
 
 const { Header, Content } = Layout;
 const { TabPane } = Tabs;
@@ -71,7 +72,7 @@ const ButtonRow = (props) => {
 };
 
 const AddInteraction = (props) => {
-  const readable = {
+  const [readable, setReadable] = useState({
     positive: "Positive",
     negative: "Negative",
     neutral: "Neutral",
@@ -81,14 +82,14 @@ const AddInteraction = (props) => {
     personal: "Personal",
     business: "Not Personal",
     other: "other",
-    initiatedByMe: "I contacted " + props.contact.name,
-    initiatedByContact: props.contact.name + " contacted me",
-  };
+    initiatedByMe: "I contacted them",
+    initiatedByContact: "They contacted me",
+  });
   var typeOptions = ["phone", "inPerson", "message", "other"];
   var purposeOptions = ["personal", "business"];
   var sentimentOptions = ["positive", "neutral", "negative"];
   var whoOptions = ["initiatedByMe", "initiatedByContact"];
-
+  const [contact, setContact] = useState(null);
   const [loading, setLoading] = useState(false);
   const [type, setType] = useState("phone");
   const [purpose, setPurpose] = useState("personal");
@@ -97,14 +98,42 @@ const AddInteraction = (props) => {
   const [diary, setDiary] = useState("");
   const saveButton = useRef(null);
   const [saveButtonBottom, setSaveButtonBottom] = useState("3%");
+  const [searchParams, setSearchParams] = useSearchParams();
+  const navigate = useNavigate();
 
+  async function getAndSetContact(contactId) {
+    var authToken = LocalStorageManager.getItem("authToken");
+
+    var apiContact = await APIManager.getContactById(contactId, authToken);
+    var contact = apiContact.data.contact;
+    setContact(contact);
+    setReadable({
+      positive: "Positive",
+      negative: "Negative",
+      neutral: "Neutral",
+      phone: "Phone",
+      inPerson: "In Person",
+      message: "Message",
+      personal: "Personal",
+      business: "Not Personal",
+      other: "other",
+      initiatedByMe: "I contacted " + contact.name,
+      initiatedByContact: contact.name + " contacted me",
+    });
+  }
   useEffect(() => {
     if (saveButton.current) {
       setSaveButtonBottom(saveButton.current.clientHeight);
     }
+    var contactId = searchParams.get(`contactId`);
+    if (contactId) {
+      getAndSetContact(contactId);
+    }
   }, []);
 
-  return (
+  return contact === null ? (
+    <></>
+  ) : (
     <div
       style={{
         // width: "95%",
@@ -139,26 +168,12 @@ const AddInteraction = (props) => {
               fontSize: "16px",
             }}
             onClick={() => {
-              props.setInteractionMode(false);
+              navigate("/contact?contactId=" + contact.id);
             }}
           />
           <Text style={{ ...styles.titleText, alignSelf: "center" }}>
-            Interaction with {props.contact.name}
+            Add an Interaction
           </Text>
-
-          {/* <Avatar src={props.contact.photo} size={40} style={styles.photo} />
-          <div
-            style={{
-              display: "flex",
-              flexDirection: "column",
-              marginLeft: "1%",
-              marginTop: "1%",
-              marginBottom: "1%",
-            }}
-          >
-            <Text style={styles.titleText}>{props.contact.name}</Text>
-            <Text style={styles.subtitleText}>{props.contact.phone}</Text>
-          </div> */}
         </div>
       </Affix>
 
@@ -191,8 +206,8 @@ const AddInteraction = (props) => {
             var authToken = LocalStorageManager.getItem("authToken");
             var apiDiary = diary === "" ? null : diary;
             var interaction = await APIManager.addInteraction(
-              props.contact,
-              props.contact.id || null,
+              contact,
+              contact.id || null,
               {
                 initiatedBy: who === "initiatedByMe" ? "me" : "contact",
                 type: {
@@ -207,11 +222,57 @@ const AddInteraction = (props) => {
             );
             console.log(interaction);
             setLoading(false);
-            props.setInteractionMode(false);
+            navigate("/contact?contactId=" + contact.id);
+
+            // props.setInteractionMode(false);
           }}
         >
           Save Interaction
         </Button>
+
+        <div
+          style={{
+            fontSize: "16px",
+            width: "93%",
+            backgroundColor: "white",
+            padding: "5px",
+            marginLeft: "auto",
+            borderRadius: 5,
+            marginRight: "auto",
+            display: "flex",
+            flexDirection: "row",
+            marginBottom: "2%",
+            marginTop: "2%",
+            justifyContent: "space-between",
+            alignItems: "center",
+          }}
+        >
+          <div style={{ display: "flex", flexDirection: "column" }}>
+            <Text style={{ fontSize: "1em", fontWeight: "bold" }}>
+              {contact.name || "No Name"}
+            </Text>
+            <Text>{contact.phone || "No Phone"}</Text>
+          </div>
+
+          <Button
+            ref={saveButton}
+            type="primary"
+            shape="round"
+            size={"large"}
+            // icon={<CheckCircleOutlined />}
+            loading={loading}
+            style={{
+              // position: "fixed",
+              bottom: "3%",
+              // width: "95%",
+              zIndex: 2,
+              // marginLeft: "2.5%",
+            }}
+          >
+            {contact === null ? "Add Contact" : "Change Contact"}
+          </Button>
+        </div>
+
         <Text
           style={{
             fontSize: "1.2em",
