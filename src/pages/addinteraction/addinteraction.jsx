@@ -97,7 +97,6 @@ const AddInteraction = (props) => {
   const [who, setWho] = useState("initiatedByMe");
   const [diary, setDiary] = useState("");
   const saveButton = useRef(null);
-  const [saveButtonBottom, setSaveButtonBottom] = useState("3%");
   const [searchParams, setSearchParams] = useSearchParams();
   const navigate = useNavigate();
 
@@ -122,281 +121,295 @@ const AddInteraction = (props) => {
     });
   }
   useEffect(() => {
-    if (saveButton.current) {
-      setSaveButtonBottom(saveButton.current.clientHeight);
-    }
     var contactId = searchParams.get(`contactId`);
+    var contactName = searchParams.get(`contactName`) || "No Name";
+    var contactPhone = searchParams.get("contactPhone") || "No Phone";
     if (contactId) {
-      getAndSetContact(contactId);
+      setContact({ id: contactId, phone: contactPhone, name: contactName });
+      setReadable({
+        positive: "Positive",
+        negative: "Negative",
+        neutral: "Neutral",
+        phone: "Phone",
+        inPerson: "In Person",
+        message: "Message",
+        personal: "Personal",
+        business: "Not Personal",
+        other: "other",
+        initiatedByMe: "I contacted " + (contactName || "them"),
+        initiatedByContact: (contactName || "They") + " contacted me",
+      });
     }
   }, []);
 
-  return contact === null ? (
-    <></>
-  ) : (
-    <div
-      style={{
-        // width: "95%",
-        margin: "auto",
-        backgroundColor: "#f5f5f5",
-        height: "100vh",
-        textAlign: "left",
-        // display: "flex",
-        // flexDirection: "column",
-        // gap: "1em",
-      }}
-    >
-      <Affix offsetTop={0}>
-        <div
-          style={{
-            backgroundColor: "white",
-            width: "100%",
-            display: "flex",
-            flexDirection: "row",
-            justifyContent: "center",
-            // marginTop: "1%",
-            marginBottom: "1%",
-            height: 60,
-          }}
-        >
-          <ArrowLeftOutlined
-            style={{
-              position: "absolute",
-              left: "3%",
-              alignSelf: "center",
-              //   backgroundColor: "green",
-              fontSize: "16px",
-            }}
-            onClick={() => {
-              navigate("/contact?contactId=" + contact.id);
-            }}
-          />
-          <Text style={{ ...styles.titleText, alignSelf: "center" }}>
-            Add an Interaction
-          </Text>
-        </div>
-      </Affix>
-
+  return (
+    contact !== null && (
       <div
         style={{
-          width: "100%",
+          // width: "95%",
           margin: "auto",
-          display: "flex",
-          flexDirection: "column",
-          overflow: "auto",
           backgroundColor: "#f5f5f5",
+          height: "100vh",
+          textAlign: "left",
+          // display: "flex",
+          // flexDirection: "column",
+          // gap: "1em",
         }}
       >
-        <Button
-          ref={saveButton}
-          type="primary"
-          shape="round"
-          size={"large"}
-          icon={<CheckCircleOutlined />}
-          loading={loading}
-          style={{
-            position: "fixed",
-            bottom: "3%",
-            width: "95%",
-            zIndex: 2,
-            marginLeft: "2.5%",
-          }}
-          onClick={async () => {
-            setLoading(true);
-            var authToken = LocalStorageManager.getItem("authToken");
-            var apiDiary = diary === "" ? null : diary;
-            var interaction = await APIManager.addInteraction(
-              contact,
-              contact.id || null,
-              {
-                initiatedBy: who === "initiatedByMe" ? "me" : "contact",
-                type: {
-                  channel: type,
-                  direction: who === "initiatedByMe" ? "outgoing" : "incoming",
-                },
-                purpose: purpose,
-                sentiment: sentiment,
-              },
-              apiDiary,
-              authToken
-            );
-            console.log(interaction);
-            setLoading(false);
-            navigate("/contact?contactId=" + contact.id);
-
-            // props.setInteractionMode(false);
-          }}
-        >
-          Save Interaction
-        </Button>
+        <Affix offsetTop={0}>
+          <div
+            style={{
+              backgroundColor: "white",
+              width: "100%",
+              display: "flex",
+              flexDirection: "row",
+              justifyContent: "center",
+              // marginTop: "1%",
+              marginBottom: "1%",
+              height: 60,
+            }}
+          >
+            <ArrowLeftOutlined
+              style={{
+                position: "absolute",
+                left: "3%",
+                alignSelf: "center",
+                //   backgroundColor: "green",
+                fontSize: "16px",
+              }}
+              onClick={() => {
+                navigate("/contact?contactId=" + contact.id);
+              }}
+            />
+            <Text style={{ ...styles.titleText, alignSelf: "center" }}>
+              Add an Interaction
+            </Text>
+          </div>
+        </Affix>
 
         <div
           style={{
-            fontSize: "16px",
-            width: "93%",
-            backgroundColor: "white",
-            padding: "5px",
-            marginLeft: "auto",
-            borderRadius: 5,
-            marginRight: "auto",
+            width: "100%",
+            margin: "auto",
             display: "flex",
-            flexDirection: "row",
-            marginBottom: "2%",
-            marginTop: "2%",
-            justifyContent: "space-between",
-            alignItems: "center",
+            flexDirection: "column",
+            overflow: "auto",
+            backgroundColor: "#f5f5f5",
           }}
         >
-          <div style={{ display: "flex", flexDirection: "column" }}>
-            <Text style={{ fontSize: "1em", fontWeight: "bold" }}>
-              {contact.name || "No Name"}
-            </Text>
-            <Text>{contact.phone || "No Phone"}</Text>
-          </div>
-
           <Button
             ref={saveButton}
             type="primary"
             shape="round"
             size={"large"}
-            // icon={<CheckCircleOutlined />}
+            icon={<CheckCircleOutlined />}
             loading={loading}
             style={{
-              // position: "fixed",
+              position: "fixed",
               bottom: "3%",
-              // width: "95%",
+              width: "95%",
+              height: 40,
               zIndex: 2,
-              // marginLeft: "2.5%",
+              marginLeft: "2.5%",
+            }}
+            onClick={async () => {
+              setLoading(true);
+              var authToken = LocalStorageManager.getItem("authToken");
+              var apiDiary = diary === "" ? null : diary;
+              var interaction = await APIManager.addInteraction(
+                contact,
+                contact.id || null,
+                {
+                  initiatedBy: who === "initiatedByMe" ? "me" : "contact",
+                  type: {
+                    channel: type,
+                    direction:
+                      who === "initiatedByMe" ? "outgoing" : "incoming",
+                  },
+                  purpose: purpose,
+                  sentiment: sentiment,
+                },
+                apiDiary,
+                authToken
+              );
+              console.log(interaction);
+              setLoading(false);
+              navigate("/contact?contactId=" + contact.id);
+
+              // props.setInteractionMode(false);
             }}
           >
-            {contact === null ? "Add Contact" : "Change Contact"}
+            Save Interaction
           </Button>
-        </div>
 
-        <Text
-          style={{
-            fontSize: "1.2em",
-            fontWeight: "bolder",
-            marginBottom: "2%",
-            width: "95%",
-            marginLeft: "auto",
-            marginRight: "auto",
-          }}
-        >
-          Who Contacted Who
-        </Text>
-        <ButtonRow
-          readable={readable}
-          options={whoOptions}
-          current={who}
-          setCurrent={setWho}
-        />
+          <div
+            style={{
+              fontSize: "16px",
+              width: "93%",
+              backgroundColor: "white",
+              padding: "5px",
+              marginLeft: "auto",
+              borderRadius: 5,
+              marginRight: "auto",
+              display: "flex",
+              flexDirection: "row",
+              marginBottom: "2%",
+              marginTop: "2%",
+              justifyContent: "space-between",
+              alignItems: "center",
+            }}
+          >
+            <div style={{ display: "flex", flexDirection: "column" }}>
+              <Text style={{ fontSize: "1em", fontWeight: "bold" }}>
+                {contact.name || "No Name"}
+              </Text>
+              <Text>{contact.phone || "No Phone"}</Text>
+            </div>
 
-        <Text
-          style={{
-            fontSize: "1.2em",
-            fontWeight: "bolder",
-            marginBottom: "2%",
-            marginTop: "4%",
-            width: "95%",
-            marginLeft: "auto",
-            marginRight: "auto",
-          }}
-        >
-          How did you guys interact?
-        </Text>
-        <ButtonRow
-          readable={readable}
-          options={typeOptions}
-          current={type}
-          setCurrent={setType}
-        />
+            <Button
+              ref={saveButton}
+              type="primary"
+              shape="round"
+              size={"large"}
+              // icon={<CheckCircleOutlined />}
+              loading={loading}
+              style={{
+                // position: "fixed",
+                bottom: "3%",
+                // width: "95%",
+                zIndex: 2,
+                // marginLeft: "2.5%",
+              }}
+            >
+              {contact === null ? "Add Contact" : "Change Contact"}
+            </Button>
+          </div>
 
-        <Text
-          style={{
-            fontSize: "1.2em",
-            fontWeight: "bolder",
-            marginBottom: "2%",
-            marginTop: "4%",
-            width: "95%",
-            marginLeft: "auto",
-            marginRight: "auto",
-          }}
-        >
-          What was the purpose?
-        </Text>
-        <ButtonRow
-          readable={readable}
-          options={purposeOptions}
-          current={purpose}
-          setCurrent={setPurpose}
-        />
+          <Text
+            style={{
+              fontSize: "1.2em",
+              fontWeight: "bolder",
+              marginBottom: "2%",
+              width: "95%",
+              marginLeft: "auto",
+              marginRight: "auto",
+            }}
+          >
+            Who Contacted Who
+          </Text>
+          <ButtonRow
+            readable={readable}
+            options={whoOptions}
+            current={who}
+            setCurrent={setWho}
+          />
 
-        <Text
-          style={{
-            fontSize: "1.2em",
-            fontWeight: "bolder",
-            marginTop: "4%",
-            marginBottom: "2%",
-            width: "95%",
-            marginLeft: "auto",
-            marginRight: "auto",
-          }}
-        >
-          How did you feel?
-        </Text>
-        <ButtonRow
-          readable={readable}
-          options={sentimentOptions}
-          current={sentiment}
-          setCurrent={setSentiment}
-        />
-        <div
-          style={{
-            display: "flex",
-            flexDirection: "row",
-            justifyContent: "space-between",
-            alignItems: "center",
-            width: "95%",
-            marginLeft: "auto",
-            marginRight: "auto",
-          }}
-        >
+          <Text
+            style={{
+              fontSize: "1.2em",
+              fontWeight: "bolder",
+              marginBottom: "2%",
+              marginTop: "4%",
+              width: "95%",
+              marginLeft: "auto",
+              marginRight: "auto",
+            }}
+          >
+            How did you guys interact?
+          </Text>
+          <ButtonRow
+            readable={readable}
+            options={typeOptions}
+            current={type}
+            setCurrent={setType}
+          />
+
+          <Text
+            style={{
+              fontSize: "1.2em",
+              fontWeight: "bolder",
+              marginBottom: "2%",
+              marginTop: "4%",
+              width: "95%",
+              marginLeft: "auto",
+              marginRight: "auto",
+            }}
+          >
+            What was the purpose?
+          </Text>
+          <ButtonRow
+            readable={readable}
+            options={purposeOptions}
+            current={purpose}
+            setCurrent={setPurpose}
+          />
+
           <Text
             style={{
               fontSize: "1.2em",
               fontWeight: "bolder",
               marginTop: "4%",
               marginBottom: "2%",
+              width: "95%",
+              marginLeft: "auto",
+              marginRight: "auto",
             }}
           >
-            Personal Diary Entry
+            How did you feel?
           </Text>
-          <div style={{}}>{diary.length} / 500</div>
-        </div>
+          <ButtonRow
+            readable={readable}
+            options={sentimentOptions}
+            current={sentiment}
+            setCurrent={setSentiment}
+          />
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "row",
+              justifyContent: "space-between",
+              alignItems: "center",
+              width: "95%",
+              marginLeft: "auto",
+              marginRight: "auto",
+            }}
+          >
+            <Text
+              style={{
+                fontSize: "1.2em",
+                fontWeight: "bolder",
+                marginTop: "4%",
+                marginBottom: "2%",
+              }}
+            >
+              Personal Diary Entry
+            </Text>
+            <div style={{}}>{diary.length} / 500</div>
+          </div>
 
-        <Input.TextArea
-          maxLength={500}
-          style={{
-            // paddingTop: "5%",
-            height: "300px",
-            fontSize: "16px",
-            marginBottom: saveButtonBottom * 2,
-            resize: "none",
-            width: "95%",
-            marginLeft: "auto",
-            marginRight: "auto",
-            // whiteSpace: "wrap",
-            // backgroundColor: "red",
-            // whiteSpace: "nowrap",
-          }}
-          value={diary}
-          onChange={(e) => {
-            setDiary(e.target.value);
-          }}
-        ></Input.TextArea>
+          <Input.TextArea
+            maxLength={500}
+            style={{
+              // paddingTop: "5%",
+              height: "300px",
+              fontSize: "16px",
+              marginBottom: 80,
+              resize: "none",
+              width: "95%",
+              marginLeft: "auto",
+              marginRight: "auto",
+              // whiteSpace: "wrap",
+              // backgroundColor: "red",
+              // whiteSpace: "nowrap",
+            }}
+            value={diary}
+            onChange={(e) => {
+              setDiary(e.target.value);
+            }}
+          ></Input.TextArea>
+        </div>
       </div>
-    </div>
+    )
   );
 };
 
