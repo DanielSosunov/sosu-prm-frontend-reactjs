@@ -37,15 +37,17 @@ const { Text, Title } = Typography;
 const ContactPage = (props) => {
   // const { name, phone, email, photo } = contact;
   const [contact, setContact] = useState(null);
-  const [interactionMode, setInteractionMode] = useState(false);
   const [searchParams, setSearchParams] = useSearchParams();
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
 
   async function getAndSetContact(contactId) {
+    setLoading(true);
     var authToken = LocalStorageManager.getItem("authToken");
 
     var apiContact = await APIManager.getContactById(contactId, authToken);
     setContact(apiContact.data.contact);
+    setLoading(false);
   }
 
   useEffect(() => {
@@ -55,9 +57,28 @@ const ContactPage = (props) => {
     }
   }, []);
   return contact == null ? (
-    <></>
-  ) : interactionMode ? (
-    <AddInteraction contact={contact} setInteractionMode={setInteractionMode} />
+    loading ? (
+      <Spin
+        style={{
+          position: "absolute",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          // height: "100vh",
+          width: "100%",
+          // top: "50%",
+          top: 0,
+          left: 0,
+          height: "100%",
+          // backgroundColor: "green",
+          // left: 0,
+          // top: 0,
+        }}
+        indicator={<LoadingOutlined style={{ fontSize: 24 }} spin />}
+      />
+    ) : (
+      <></>
+    )
   ) : (
     <div>
       <Affix offsetTop={0}>
@@ -108,8 +129,10 @@ const ContactPage = (props) => {
                 gap: 2,
               }}
             >
-              <Text style={styles.titleText}>{contact.name}</Text>
-              <Text style={styles.subtitleText}>{contact.phone}</Text>
+              <Text style={styles.titleText}>{contact.name || "No Name"}</Text>
+              <Text style={styles.subtitleText}>
+                {contact.phone || "No Phone"}
+              </Text>
             </div>
           </div>
           <Button
