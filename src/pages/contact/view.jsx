@@ -153,7 +153,9 @@ const ContactPage = (props) => {
               zIndex: 3,
             }}
             onClick={() => {
-              navigate("/addinteraction?contactId=" + contact.id);
+              navigate(
+                `/addinteraction?contactId=${contact.id}&contactName=${contact.name}&contactPhone=${contact.phone}`
+              );
             }}
           >
             Add Interaction
