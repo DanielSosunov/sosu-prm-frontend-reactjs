@@ -36,6 +36,7 @@ import LocalStorageManager from "../../utils/LocalStorageManager";
 import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 import MonthYearPicker from "./monthyearpicker";
+import SelectContact from "./selectcontact";
 const { Header, Content } = Layout;
 const { TabPane } = Tabs;
 const { Text, Title } = Typography;
@@ -52,13 +53,11 @@ const readable = {
   other: "Other",
 };
 
-const Analytics = ({ contact }) => {
-  const { name, phone, email, photo } = contact;
-  const [contactsExpanded, setContactsExpanded] = useState(false);
+const Analytics = ({ getContact }) => {
+  // const { name, phone, email, photo } = contact;
+  //I commented this out and removed contact from prop. Now I have to edit the Monthly Analytics API call to be able to accept no contact so it can give monthly analytics for all
   const [yearMonth, setYearMonth] = useState(moment().format("YYYY-MM"));
   const [analytics, setAnalytics] = useState(null);
-  const [contactsInteracted, setContactsInteracted] = useState([]);
-  const [contactSelected, setContactSelected] = useState("All Contacts");
   const [monthlyInteraction, setMonthlyInteraction] = useState({
     totalInteractions: 0,
     initiatedByMe: 0,
@@ -79,59 +78,17 @@ const Analytics = ({ contact }) => {
       business: 0,
     },
   });
+  const [contactsExpanded, setContactsExpanded] = useState(false);
   const [loading, setLoading] = useState(false);
 
+  //Happens every time a Calendar date is selected
   useEffect(() => {
     console.log(`UseEffect [yearMonth]`, yearMonth);
-
-    var authToken = LocalStorageManager.getItem("authToken");
-
-    APIManager.getContactsByUserId(authToken).then((result) => {
-      if (result.data.contacts) {
-        setContactsInteracted(result.data.contacts);
-      }
-    });
 
     fetchMonthlyInteractions();
   }, [yearMonth]);
 
-  async function fetchMonthlyInteractions() {
-    var authToken = LocalStorageManager.getItem("authToken");
-
-    setLoading(true);
-    await APIManager.getMonthlyInteractions(
-      contact.id,
-      yearMonth,
-      authToken
-    ).then((result) => {
-      console.log(result);
-      if (result.data.monthlyInteraction)
-        setMonthlyInteraction(result.data.monthlyInteraction);
-      else {
-        setMonthlyInteraction({
-          totalInteractions: 0,
-          initiatedByMe: 0,
-          initiatedByContact: 0,
-          interactionTypes: {
-            phone: 0,
-            inPerson: 0,
-            messages: 0,
-          },
-          interactionSentiments: {
-            positive: 0,
-            neutral: 0,
-            negative: 0,
-            other: 0,
-          },
-          interactionPurposes: {
-            personal: 0,
-            business: 0,
-          },
-        });
-      }
-    });
-    setLoading(false);
-  }
+  //Every time the Monthly Interaction data is set from the API call
   useEffect(() => {
     console.log(`UseEffect:[monthlyInteraction]`, monthlyInteraction);
 
@@ -177,59 +134,43 @@ const Analytics = ({ contact }) => {
     setAnalytics(data);
   }, [monthlyInteraction]);
 
-  function renderListOfContactsInteractedWith() {
-    var list = [];
-    list.push(
-      <Button
-        onClick={() => {
-          setContactSelected("All Contacts");
-        }}
-        type={contactSelected === "All Contacts" ? "primary" : null}
-        style={{
-          margin: "auto",
+  async function fetchMonthlyInteractions() {
+    var authToken = LocalStorageManager.getItem("authToken");
 
-          width: "95%",
-          backgroundColor:
-            contactSelected === "All Contacts" ? null : "#f3f3f3",
-          borderRadius: 5,
-          padding: 5,
-        }}
-      >
-        All Contacts{" "}
-        {contactSelected === "All Contacts" && (
-          <CheckCircleOutlined color={"white"} />
-        )}
-      </Button>
-    );
-
-    var list2 = contactsInteracted.map((contact) => (
-      <Button
-        id={contact.id}
-        onClick={(e) => {
-          setContactSelected(contact.id);
-        }}
-        type={contactSelected === contact.id ? "primary" : null}
-        style={{
-          margin: "auto",
-
-          width: "95%",
-          backgroundColor: contactSelected === contact.id ? null : "#f3f3f3",
-          borderRadius: 5,
-          padding: 5,
-        }}
-      >
-        {contact.name}{" "}
-        {contactSelected === contact.id && (
-          <CheckCircleOutlined color={"white"} />
-        )}
-      </Button>
-    ));
-
-    return (
-      <div style={{ display: "flex", gap: 5, flexDirection: "column" }}>
-        {[...list, ...list2]}
-      </div>
-    );
+    setLoading(true);
+    await APIManager.getMonthlyInteractions(
+      // contact.id,
+      "test",
+      yearMonth,
+      authToken
+    ).then((result) => {
+      console.log(result);
+      if (result.data.monthlyInteraction)
+        setMonthlyInteraction(result.data.monthlyInteraction);
+      else {
+        setMonthlyInteraction({
+          totalInteractions: 0,
+          initiatedByMe: 0,
+          initiatedByContact: 0,
+          interactionTypes: {
+            phone: 0,
+            inPerson: 0,
+            messages: 0,
+          },
+          interactionSentiments: {
+            positive: 0,
+            neutral: 0,
+            negative: 0,
+            other: 0,
+          },
+          interactionPurposes: {
+            personal: 0,
+            business: 0,
+          },
+        });
+      }
+    });
+    setLoading(false);
   }
 
   return (
@@ -277,64 +218,10 @@ const Analytics = ({ contact }) => {
           marginTop: "1em",
           display: "flex",
           flexDirection: "row",
-          justifyContent: "space-between",
+          justifyContent: "flex-end",
           position: "relative",
         }}
       >
-        <div
-          style={{
-            alignItems: "center",
-            display: "flex",
-            flexDirection: "row",
-            gap: 5,
-            position: "relative",
-          }}
-        >
-          {contactsExpanded && (
-            <div
-              style={{
-                backgroundColor: "white",
-                maxHeight: "30vh",
-                width: "100%",
-                position: "absolute",
-                top: 40,
-                paddingTop: 5,
-                paddingBottom: 5,
-                borderRadius: 5,
-                border: "1px solid #dedede",
-                alignItems: "center",
-              }}
-            >
-              <div>{renderListOfContactsInteractedWith()}</div>
-              <Text style={{ color: "gray", fontSize: "0.8em" }}>
-                Contacts you've interacted with will show up here.
-              </Text>
-            </div>
-          )}
-          <Text
-            style={{
-              fontSize: "1em",
-
-              color: "black",
-              alignSelf: "center",
-            }}
-          >
-            Analytics for
-          </Text>
-          <Button
-            onClick={() => {
-              setContactsExpanded(!contactsExpanded);
-            }}
-            // icon={
-            // }
-          >
-            {contactSelected === "All Contacts"
-              ? "All Contacts"
-              : contactsInteracted.find((e) => e.id === contactSelected).name}
-            {!contactsExpanded ? <DownCircleOutlined /> : <UpCircleOutlined />}
-          </Button>
-        </div>
-
         <MonthYearPicker setYearMonth={setYearMonth} />
       </div>
 
@@ -351,7 +238,7 @@ const Analytics = ({ contact }) => {
       >
         <StatsCard
           stat={monthlyInteraction.totalInteractions}
-          text={"Interactions with " + name}
+          text={"Interactions with " + "name"}
           cardColor={"#FDDCFF"}
           icon={
             <MdEmojiPeople

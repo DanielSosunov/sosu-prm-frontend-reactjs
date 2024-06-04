@@ -29,6 +29,7 @@ import APIManager from "../../utils/APIManager";
 import LocalStorageManager from "../../utils/LocalStorageManager";
 import InteractionsPaginated from "./interactionspaginated";
 import { useNavigate, useSearchParams } from "react-router-dom";
+import SelectContact from "./selectcontact";
 
 const { Header, Content } = Layout;
 const { TabPane } = Tabs;
@@ -37,49 +38,45 @@ const { Text, Title } = Typography;
 const ContactPage = (props) => {
   // const { name, phone, email, photo } = contact;
   const [contact, setContact] = useState(null);
+  const [contactIdSelected, setContactIdSelected] = useState(null);
+  const [contactsInteractedWith, setContactsInteractedWith] = useState(null);
   const [searchParams, setSearchParams] = useSearchParams();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
+  const [lastVisible, setLastVisible] = useState(null);
 
-  async function getAndSetContact(contactId) {
-    setLoading(true);
+  async function getAndSetContactsInteractedWith() {
     var authToken = LocalStorageManager.getItem("authToken");
+    setLoading(true);
+    await APIManager.getContactsByUserId(authToken, lastVisible).then(
+      (result) => {
+        if (result.data.contacts) {
+          if (!contactsInteractedWith)
+            setContactsInteractedWith(result.data.contacts);
+          else
+            setContactsInteractedWith([
+              ...contactsInteractedWith,
+              ...result.data.contacts,
+            ]);
+          if (result.data.lastVisible) setLastVisible(result.data.lastVisible);
+          else setLastVisible(null);
+        }
+      }
+    );
 
-    var apiContact = await APIManager.getContactById(contactId, authToken);
-    setContact(apiContact.data.contact);
     setLoading(false);
   }
-
-  useEffect(() => {
+  async function initialFunc() {
+    await getAndSetContactsInteractedWith();
     var contactId = searchParams.get(`contactId`);
     if (contactId) {
-      getAndSetContact(contactId);
+      setContactIdSelected(contactId);
     }
+  }
+  useEffect(() => {
+    // initialFunc();
   }, []);
-  return contact == null ? (
-    loading ? (
-      <Spin
-        style={{
-          position: "absolute",
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          // height: "100vh",
-          width: "100%",
-          // top: "50%",
-          top: 0,
-          left: 0,
-          height: "100%",
-          // backgroundColor: "green",
-          // left: 0,
-          // top: 0,
-        }}
-        indicator={<LoadingOutlined style={{ fontSize: 24 }} spin />}
-      />
-    ) : (
-      <></>
-    )
-  ) : (
+  return (
     <div>
       <Affix offsetTop={0}>
         <div
@@ -110,30 +107,6 @@ const ContactPage = (props) => {
                 fontSize: "16px",
               }}
             />
-
-            {/* <Avatar
-              src={contact.photo}
-              size={40}
-              style={{ ...styles.photo, marginRight: "2%" }}
-            /> */}
-            <div
-              style={{
-                // paddingLeft: "3%",
-                // backgroundColor: "green",
-                display: "flex",
-                flexDirection: "column",
-                marginLeft: "1%",
-                marginTop: "1%",
-                marginBottom: "1%",
-                justifyContent: "center",
-                gap: 2,
-              }}
-            >
-              <Text style={styles.titleText}>{contact.name || "No Name"}</Text>
-              <Text style={styles.subtitleText}>
-                {contact.phone || "No Phone"}
-              </Text>
-            </div>
           </div>
           <Button
             type="primary"
@@ -164,10 +137,38 @@ const ContactPage = (props) => {
       </Affix>
 
       <div style={styles.container}>
-        <div style={{ width: "95%", margin: "auto", zIndex: 1 }}>
-          <Analytics contact={contact} />
+        <div
+          style={{
+            position: "relative",
+            width: "95%",
+            margin: "auto",
+            zIndex: 1,
+          }}
+        >
+          <div
+            style={{
+              // backgroundColor: "green",
+              position: "absolute",
+
+              marginTop: "1.1em",
+            }}
+          >
+            <SelectContact
+              lastVisibleFunc={
+                lastVisible
+                  ? () => {
+                      getAndSetContactsInteractedWith();
+                    }
+                  : null
+              }
+              contactIdSelected={contactIdSelected}
+              setContactIdSelected={setContactIdSelected}
+              contactsInteractedWith={contactsInteractedWith}
+            />
+          </div>
+          {/* <Analytics contact={contact} />
           <Divider />
-          <InteractionsPaginated contact={contact} />
+          <InteractionsPaginated contact={contact} /> */}
         </div>
       </div>
     </div>

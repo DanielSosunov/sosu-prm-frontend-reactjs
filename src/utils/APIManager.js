@@ -79,8 +79,9 @@ const APIManager = {
       Authorization: `Bearer ${authToken}`,
     });
   },
-  getContactsByUserId: async (authToken) => {
+  getContactsByUserId: async (authToken, lastVisible) => {
     var url = `/contacts/`;
+    if (lastVisible) url += `?startAfter=${lastVisible}`;
     return APIManager.request(url, "GET", null, {
       Authorization: `Bearer ${authToken}`,
     });
