@@ -56,15 +56,14 @@ const APIManager = {
         Authorization: `Bearer ${authToken}`,
       }
     ),
-  getMonthlyInteractions: (contactId, yearMonth = null, authToken) =>
-    APIManager.request(
-      `/analytics/monthly?contactId=${contactId}&yearMonth=${yearMonth}`,
-      "GET",
-      null,
-      {
-        Authorization: `Bearer ${authToken}`,
-      }
-    ),
+  getMonthlyInteractions: (contactId, yearMonth = null, authToken) => {
+    var url = `/analytics/monthly?yearMonth=${yearMonth}`;
+    if (contactId) url += `&contactId=${contactId}`;
+    return APIManager.request(url, "GET", null, {
+      Authorization: `Bearer ${authToken}`,
+    });
+  },
+
   getPaginatedInteractions: async (contactId, startAfter, authToken) => {
     var url = `/interaction/paginated?`;
     if (contactId) url += `contactId=${contactId}`;

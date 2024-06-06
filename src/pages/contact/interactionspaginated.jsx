@@ -52,7 +52,9 @@ const InteractionsPaginated = ({ contact }) => {
     for (var i = 0; i < interactions.length; i++) {
       var interaction = interactions[i];
       console.log(interaction);
-      list.push(<PaginatedElement interaction={interaction} />);
+      list.push(
+        <PaginatedElement contact={contact} interaction={interaction} />
+      );
     }
     var startAfter = LocalStorageManager.getItem("paginatedPointer");
     if (startAfter !== null && startAfter !== `null`) {
@@ -122,7 +124,7 @@ const InteractionsPaginated = ({ contact }) => {
     if (startAfter === null || startAfter === "null") startAfter = null;
     setLoading(true);
     await APIManager.getPaginatedInteractions(
-      contact.id,
+      contact?.id || null,
       startAfter,
       authToken
     ).then((result) => {
@@ -145,8 +147,9 @@ const InteractionsPaginated = ({ contact }) => {
   useEffect(() => {
     //Set paginated requests to null
     LocalStorageManager.setItem("paginatedPointer", null);
+    setListOfInteractions([]);
     fetchPaginatedInteractions();
-  }, []);
+  }, [contact]);
 
   return (
     <Content
@@ -162,6 +165,7 @@ const InteractionsPaginated = ({ contact }) => {
         overflow: "auto",
         paddingBottom: "4%",
         scrollbarWidth: "none",
+        height: "100%",
         zIndex: 9,
         opacity: loading ? 0.3 : 1,
       }}
@@ -177,7 +181,11 @@ const InteractionsPaginated = ({ contact }) => {
         All Interactions
       </Text>
 
-      {loading && (
+      <div style={{ height: "100%", width: "100%" }}>
+        <Text>Add some interactions for them to show up.</Text>
+      </div>
+
+      {/* {loading && (
         <Spin
           style={{
             position: "absolute",
@@ -197,7 +205,7 @@ const InteractionsPaginated = ({ contact }) => {
           indicator={<LoadingOutlined style={{ fontSize: 24 }} spin />}
         />
       )}
-      {listOfInteractions}
+      {listOfInteractions.length > 0 && listOfInteractions} */}
     </Content>
   );
 };

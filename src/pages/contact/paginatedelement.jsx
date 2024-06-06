@@ -78,7 +78,17 @@ const PaginatedElement = (props) => {
                   fontWeight: "bold",
                 }}
               >
-                {interactionTypeLanguage[props.interaction.type.channel]}
+                {interactionTypeLanguage[props.interaction.type.channel]}{" "}
+                {!props.contact && props.interaction.contactName && (
+                  <>
+                    <Text style={{ fontWeight: "lighter", fontSize: "1em" }}>
+                      with
+                    </Text>{" "}
+                    <Text style={{ fontWeight: "bold", fontSize: "1em" }}>
+                      {props.interaction.contactName}
+                    </Text>
+                  </>
+                )}
               </Text>
               <div style={{ marginLeft: "2px", marginRight: "2px" }} />
               <Text style={{ fontSize: "0.7em", fontWeight: "regular" }}>

@@ -38,44 +38,12 @@ const { Text, Title } = Typography;
 const ContactPage = (props) => {
   // const { name, phone, email, photo } = contact;
   const [contact, setContact] = useState(null);
-  const [contactIdSelected, setContactIdSelected] = useState(null);
-  const [contactsInteractedWith, setContactsInteractedWith] = useState(null);
-  const [searchParams, setSearchParams] = useSearchParams();
   const navigate = useNavigate();
-  const [loading, setLoading] = useState(false);
-  const [lastVisible, setLastVisible] = useState(null);
 
-  async function getAndSetContactsInteractedWith() {
-    var authToken = LocalStorageManager.getItem("authToken");
-    setLoading(true);
-    await APIManager.getContactsByUserId(authToken, lastVisible).then(
-      (result) => {
-        if (result.data.contacts) {
-          if (!contactsInteractedWith)
-            setContactsInteractedWith(result.data.contacts);
-          else
-            setContactsInteractedWith([
-              ...contactsInteractedWith,
-              ...result.data.contacts,
-            ]);
-          if (result.data.lastVisible) setLastVisible(result.data.lastVisible);
-          else setLastVisible(null);
-        }
-      }
-    );
-
-    setLoading(false);
-  }
-  async function initialFunc() {
-    await getAndSetContactsInteractedWith();
-    var contactId = searchParams.get(`contactId`);
-    if (contactId) {
-      setContactIdSelected(contactId);
-    }
-  }
   useEffect(() => {
-    // initialFunc();
-  }, []);
+    console.log(contact);
+  }, [contact]);
+
   return (
     <div>
       <Affix offsetTop={0}>
@@ -126,9 +94,11 @@ const ContactPage = (props) => {
               zIndex: 3,
             }}
             onClick={() => {
-              navigate(
-                `/addinteraction?contactId=${contact.id}&contactName=${contact.name}&contactPhone=${contact.phone}`
-              );
+              if (contact)
+                navigate(
+                  `/addinteraction?contactId=${contact.id}&contactName=${contact.name}&contactPhone=${contact.phone}`
+                );
+              else navigate(`/addinteraction`);
             }}
           >
             Add Interaction
@@ -153,22 +123,11 @@ const ContactPage = (props) => {
               marginTop: "1.1em",
             }}
           >
-            <SelectContact
-              lastVisibleFunc={
-                lastVisible
-                  ? () => {
-                      getAndSetContactsInteractedWith();
-                    }
-                  : null
-              }
-              contactIdSelected={contactIdSelected}
-              setContactIdSelected={setContactIdSelected}
-              contactsInteractedWith={contactsInteractedWith}
-            />
+            <SelectContact title="Analytics For " getContact={setContact} />
           </div>
-          {/* <Analytics contact={contact} />
+          <Analytics contact={contact} />
           <Divider />
-          <InteractionsPaginated contact={contact} /> */}
+          <InteractionsPaginated contact={contact} />
         </div>
       </div>
     </div>

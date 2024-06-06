@@ -93,6 +93,7 @@ const SelectContact = (props) => {
   }, []);
 
   useEffect(() => {
+    setContactsExpanded(false);
     //When a contact is selected, generate the display name
     getButtonDisplayName();
 
@@ -103,6 +104,8 @@ const SelectContact = (props) => {
       APIManager.getContactById(contactIdSelected, authToken).then((result) => {
         if (result?.data?.contact) props.getContact(result.data.contact);
       });
+    } else if (!contactIdSelected && props.getContact) {
+      props.getContact(null);
     }
   }, [contactIdSelected]);
   function renderListOfContactsInteractedWith() {
@@ -122,7 +125,7 @@ const SelectContact = (props) => {
           padding: 5,
         }}
       >
-        All Contacts{" "}
+        {props.buttonTitle || "All Contacts"}{" "}
         {contactIdSelected === null && <CheckCircleOutlined color={"white"} />}
       </Button>
     );
@@ -180,7 +183,7 @@ const SelectContact = (props) => {
   async function getButtonDisplayName() {
     var dName = "No Name";
 
-    if (contactIdSelected === null) dName = "All Contacts";
+    if (contactIdSelected === null) dName = props.buttonTitle || "All Contacts";
     else if (contactsInteractedWith) {
       var findContact = contactsInteractedWith.find(
         (e) => e.id === contactIdSelected
@@ -207,6 +210,8 @@ const SelectContact = (props) => {
           flexDirection: "row",
           gap: 5,
           position: "relative",
+          zIndex: 10,
+          ...props.style,
         }}
       >
         {contactsExpanded && (
@@ -216,40 +221,54 @@ const SelectContact = (props) => {
               maxHeight: "30vh",
               overflow: "auto",
               width: "100%",
+              // width: "100vw",
+              // height: "100vh",
+              // position: "fixed",
               position: "absolute",
               top: 40,
+              // left: 0,
+              // top: 0,
               paddingTop: 5,
               paddingBottom: 5,
               borderRadius: 5,
               border: "1px solid #dedede",
               alignItems: "center",
+              zIndex: 10,
             }}
           >
             <div>{renderListOfContactsInteractedWith()}</div>
-            <span
+            <div
               style={{
-                paddingLeft: 5,
-                paddingRight: 5,
+                width: "95%",
+                margin: "auto",
+                paddingTop: 5,
+                //  paddingLeft: 5,
+                // paddingRight: 5,
                 color: "gray",
-                fontSize: "0.6em",
+                // fontSize: "0.6em",
+                // backgroundColor: "red",
+                textAlign: "center",
               }}
             >
               Contacts you've interacted with will show up here.
-            </span>
+            </div>
           </div>
         )}
-        <Text
-          style={{
-            fontSize: "1em",
-
-            color: "black",
-            alignSelf: "center",
-          }}
-        >
-          Analytics for
-        </Text>
+        {props.title && (
+          <Text
+            style={{
+              fontSize: "1em",
+              whiteSpace: "nowrap",
+              color: "black",
+              alignSelf: "center",
+            }}
+          >
+            {props.title}
+          </Text>
+        )}
 
         <Button
+          style={{ width: "100%" }}
           onClick={() => {
             setContactsExpanded(!contactsExpanded);
           }}

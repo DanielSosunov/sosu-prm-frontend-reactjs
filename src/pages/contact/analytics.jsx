@@ -53,7 +53,7 @@ const readable = {
   other: "Other",
 };
 
-const Analytics = ({ getContact }) => {
+const Analytics = (props) => {
   // const { name, phone, email, photo } = contact;
   //I commented this out and removed contact from prop. Now I have to edit the Monthly Analytics API call to be able to accept no contact so it can give monthly analytics for all
   const [yearMonth, setYearMonth] = useState(moment().format("YYYY-MM"));
@@ -86,7 +86,7 @@ const Analytics = ({ getContact }) => {
     console.log(`UseEffect [yearMonth]`, yearMonth);
 
     fetchMonthlyInteractions();
-  }, [yearMonth]);
+  }, [yearMonth, props.contact]);
 
   //Every time the Monthly Interaction data is set from the API call
   useEffect(() => {
@@ -139,8 +139,8 @@ const Analytics = ({ getContact }) => {
 
     setLoading(true);
     await APIManager.getMonthlyInteractions(
-      // contact.id,
-      "test",
+      props.contact?.id || null,
+
       yearMonth,
       authToken
     ).then((result) => {
