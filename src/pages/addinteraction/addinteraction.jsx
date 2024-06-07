@@ -165,6 +165,7 @@ const AddInteraction = (props) => {
             // marginTop: "1%",
             marginBottom: "1%",
             height: 60,
+            zIndex: 11,
           }}
         >
           <ArrowLeftOutlined

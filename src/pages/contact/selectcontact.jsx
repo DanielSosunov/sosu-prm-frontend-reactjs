@@ -139,7 +139,7 @@ const SelectContact = (props) => {
         type={contactIdSelected === contact.id ? "primary" : null}
         style={{
           margin: "auto",
-
+          whiteSpace: "wrap",
           width: "100%",
           backgroundColor: contactIdSelected === contact.id ? null : "#f3f3f3",
           borderRadius: 5,
@@ -218,7 +218,7 @@ const SelectContact = (props) => {
           flexDirection: "row",
           gap: 5,
           position: "relative",
-          zIndex: 10,
+          zIndex: 9,
           width: "60vw",
           ...props.style,
           // backgroundColor: "red",
@@ -243,7 +243,7 @@ const SelectContact = (props) => {
               borderRadius: 5,
               border: "1px solid #dedede",
               alignItems: "center",
-              zIndex: 10,
+              zIndex: 9,
             }}
           >
             <div>{renderListOfContactsInteractedWith()}</div>
@@ -282,6 +282,7 @@ const SelectContact = (props) => {
             fontSize: "clamp(12px, 2vw, 24px)",
             width: "100%",
             height: "30px",
+            whiteSpace: "wrap",
           }}
           onClick={() => {
             setContactsExpanded(!contactsExpanded);

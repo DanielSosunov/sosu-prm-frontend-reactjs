@@ -188,7 +188,7 @@ const Analytics = (props) => {
         overflow: "auto",
         //   marginBottom: "3%",
         scrollbarWidth: "none",
-        zIndex: 9,
+        // zIndex: 9,
         opacity: loading ? 0.3 : 1,
       }}
     >

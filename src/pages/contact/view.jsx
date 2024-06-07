@@ -45,7 +45,7 @@ const ContactPage = (props) => {
   }, [contact]);
 
   return (
-    <div>
+    <div style={{ backgroundColor: "#f3f3f3" }}>
       <Affix offsetTop={0}>
         <div
           style={{
@@ -134,7 +134,7 @@ const ContactPage = (props) => {
             position: "relative",
             width: "95%",
             margin: "auto",
-            zIndex: 1,
+            // zIndex: 1,
           }}
         >
           <div

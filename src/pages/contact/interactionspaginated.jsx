@@ -101,7 +101,7 @@ const InteractionsPaginated = ({ contact }) => {
           loading={loading}
           // icon={<PlusCircleOutlined />}
           style={{
-            height: "5%",
+            height: "100%",
             // margin: "auto",
             // alignSelf: "left",
             // color: "#EdEdEd",
