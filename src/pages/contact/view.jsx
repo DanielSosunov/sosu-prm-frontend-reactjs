@@ -53,9 +53,11 @@ const ContactPage = (props) => {
             flexDirection: "row",
             width: "100%",
             backgroundColor: "white",
+            height: 60,
+            justifyContent: "space-between",
           }}
         >
-          <div
+          {/* <div
             style={{
               backgroundColor: "white",
               width: "100%",
@@ -65,27 +67,45 @@ const ContactPage = (props) => {
               // justifyContent: "center",
               height: 60,
             }}
+          > */}
+          <ArrowLeftOutlined
+            style={{
+              // position: "absolute",
+              marginLeft: "2.5%",
+              padding: 0,
+              // marginRight: "3%",
+              alignSelf: "center",
+              //   backgroundColor: "green",
+              fontSize: "16px",
+            }}
+          />
+          {/* </div> */}
+          <Text
+            style={{
+              ...styles.titleText,
+              display: "flex",
+              position: "absolute",
+              alignSelf: "center",
+              // alignItems: "center",
+              // alignContent: "center",
+              justifyContent: "center",
+              width: "100%",
+              textAlign: "center",
+              // backgroundColor: "red",
+            }}
           >
-            <ArrowLeftOutlined
-              style={{
-                // position: "absolute",
-                marginRight: "3%",
-                alignSelf: "center",
-                //   backgroundColor: "green",
-                fontSize: "16px",
-              }}
-            />
-          </div>
+            Analytics
+          </Text>
           <Button
-            type="primary"
-            shape="round"
+            type="link"
             size={"large"}
             icon={<PlusCircleOutlined />}
             style={{
               // position: "fixed",
               // bottom: "3%",
-              justifySelf: "end",
+              // justifySelf: "end",
               alignSelf: "center",
+              padding: 0,
               // width: "30%",
               // height: "5%",
               // height: "10px",
