@@ -27,7 +27,7 @@ import BarChartWithTabs from "../../utils/BarChart";
 import APIManager from "../../utils/APIManager";
 import LocalStorageManager from "../../utils/LocalStorageManager";
 import { useNavigate, useSearchParams } from "react-router-dom";
-import SelectContact from "../contact/selectcontact";
+import SelectContact from "../analytics/selectcontact";
 
 const { Header, Content } = Layout;
 const { TabPane } = Tabs;
@@ -168,19 +168,21 @@ const AddInteraction = (props) => {
             zIndex: 11,
           }}
         >
-          <ArrowLeftOutlined
-            style={{
-              position: "absolute",
-              left: "3%",
-              alignSelf: "center",
-              //   backgroundColor: "green",
-              fontSize: "16px",
-            }}
-            onClick={() => {
-              if (contact) navigate("/contact?contactId=" + contact.id);
-              else navigate("/contact");
-            }}
-          />
+          {searchParams.get("back") && (
+            <ArrowLeftOutlined
+              style={{
+                position: "absolute",
+                left: "3%",
+                alignSelf: "center",
+                //   backgroundColor: "green",
+                fontSize: "16px",
+              }}
+              onClick={() => {
+                if (contact) navigate("/analytics?contactId=" + contact.id);
+                else navigate("/analytics");
+              }}
+            />
+          )}
           <Text style={{ ...styles.titleText, alignSelf: "center" }}>
             Add an Interaction
           </Text>
@@ -234,7 +236,7 @@ const AddInteraction = (props) => {
             );
             console.log(interaction);
             setLoading(false);
-            navigate("/contact?contactId=" + contact.id);
+            navigate("/analytics?contactId=" + contact.id);
 
             // props.setInteractionMode(false);
           }}

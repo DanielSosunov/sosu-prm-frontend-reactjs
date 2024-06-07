@@ -54,7 +54,7 @@ const ContactPage = (props) => {
             width: "100%",
             backgroundColor: "white",
             height: 60,
-            justifyContent: "space-between",
+            justifyContent: "end",
           }}
         >
           {/* <div
@@ -68,7 +68,7 @@ const ContactPage = (props) => {
               height: 60,
             }}
           > */}
-          <ArrowLeftOutlined
+          {/* <ArrowLeftOutlined
             style={{
               // position: "absolute",
               marginLeft: "2.5%",
@@ -78,7 +78,7 @@ const ContactPage = (props) => {
               //   backgroundColor: "green",
               fontSize: "16px",
             }}
-          />
+          /> */}
           {/* </div> */}
           <Text
             style={{

@@ -24,7 +24,7 @@ const LoginForm = () => {
       const response = await APIManager.login({ username, password });
       if (response.success === true) {
         LocalStorageManager.setItem("authToken", response.data.token);
-        navigate("/contact");
+        navigate("/analytics");
       } else {
         setErrorMessage(response.message);
         setErrorModalVisible(true);
@@ -43,7 +43,7 @@ const LoginForm = () => {
       const response = await APIManager.signup({ username, password });
       if (response.success === true) {
         LocalStorageManager.setItem("authToken", response.data.token);
-        navigate("/contact");
+        navigate("/analytics");
       } else {
         setErrorMessage(response.message);
         setErrorModalVisible(true);

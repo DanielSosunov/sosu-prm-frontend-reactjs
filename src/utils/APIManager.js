@@ -31,19 +31,21 @@ const APIManager = {
       endpoint.includes("/interaction/paginated") &&
       method === "GET"
     ) {
+      var interactions = [];
+      for (var i = 0; i < 10; i++) {
+        interactions.push({
+          sentiment: "positive",
+          initiatedBy: "contact",
+          type: { channel: "phone" },
+          contactName: "Daniel",
+          purpose: "personal",
+          timestamp: new Date().getTime(),
+          diary: "Test diary",
+        });
+      }
       return {
         data: {
-          interactions: [
-            {
-              sentiment: "positive",
-              initiatedBy: "contact",
-              type: { channel: "phone" },
-              contactName: "Daniel",
-              purpose: "personal",
-              timestamp: new Date().getTime(),
-              diary: "Test diary",
-            },
-          ],
+          interactions,
         },
       };
     } else if (endpoint.includes("/contact/") && method === "GET") {

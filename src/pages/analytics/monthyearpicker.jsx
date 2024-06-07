@@ -15,6 +15,14 @@ import {
   Tag,
 } from "antd";
 import moment from "moment";
+import {
+  ArrowLeftOutlined,
+  PlusCircleOutlined,
+  LoadingOutlined,
+  UpCircleOutlined,
+  DownCircleOutlined,
+  CheckCircleOutlined,
+} from "@ant-design/icons";
 import { FaAngleLeft, FaAngleRight, FaRegCalendarAlt } from "react-icons/fa";
 
 const { Text, Title } = Typography;
@@ -123,6 +131,7 @@ const MonthYearPicker = (props) => {
             style={{
               width: "90%",
               display: "flex",
+              position: "relative",
               margin: "auto",
               alignContent: "center",
               // padding: "2%",

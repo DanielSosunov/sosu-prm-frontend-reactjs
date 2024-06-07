@@ -34,6 +34,7 @@ const PaginatedElement = (props) => {
   return (
     props.interaction && (
       <div
+        key={props.interaction.id}
         style={{
           display: "flex",
           flexDirection: "column",
@@ -41,6 +42,7 @@ const PaginatedElement = (props) => {
           borderRadius: "5px",
           //   width: "100%",
           padding: "3%",
+          zIndex: 1,
         }}
         onClick={(event) => {
           if (props.interaction.diary) setDiaryView(!diaryView);
@@ -52,6 +54,7 @@ const PaginatedElement = (props) => {
             flexDirection: "row",
             justifyContent: "space-between",
             flex: 10,
+            zIndex: 1,
             width: "100%",
             marginBottom: diaryView ? "2%" : 0,
             // backgroundColor: "green",

@@ -175,7 +175,7 @@ const InteractionsPaginated = ({ contact }) => {
         paddingBottom: "4%",
         scrollbarWidth: "none",
         height: "100%",
-        zIndex: 9,
+        zIndex: 1,
         opacity: loading ? 0.3 : 1,
       }}
     >

@@ -132,6 +132,7 @@ const SelectContact = (props) => {
 
     var list2 = contactsInteractedWith.map((contact) => (
       <Button
+        key={contact.id}
         id={contact.id}
         onClick={(e) => {
           setContactIdSelected(contact.id);
@@ -178,6 +179,7 @@ const SelectContact = (props) => {
         style={{
           display: "flex",
           gap: 5,
+          zIndex: 9,
           flexDirection: "column",
           padding: 5,
           margin: "auto",
@@ -218,7 +220,7 @@ const SelectContact = (props) => {
           flexDirection: "row",
           gap: 5,
           position: "relative",
-          zIndex: 9,
+          zIndex: 8,
           width: "60vw",
           ...props.style,
           // backgroundColor: "red",
@@ -239,11 +241,11 @@ const SelectContact = (props) => {
               // left: 0,
               // top: 0,
               // paddingTop: 5,
+              zIndex: 9,
               paddingBottom: 5,
               borderRadius: 5,
               border: "1px solid #dedede",
               alignItems: "center",
-              zIndex: 9,
             }}
           >
             <div>{renderListOfContactsInteractedWith()}</div>
@@ -255,6 +257,7 @@ const SelectContact = (props) => {
                 //  paddingLeft: 5,
                 // paddingRight: 5,
                 color: "gray",
+                zIndex: 4,
                 // fontSize: "0.6em",
                 // backgroundColor: "red",
                 textAlign: "center",
