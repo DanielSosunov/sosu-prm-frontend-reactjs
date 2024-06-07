@@ -99,13 +99,15 @@ const ContactPage = (props) => {
           <Button
             type="link"
             size={"large"}
-            icon={<PlusCircleOutlined />}
+            // icon={<PlusCircleOutlined />}
             style={{
               // position: "fixed",
               // bottom: "3%",
               // justifySelf: "end",
               alignSelf: "center",
               padding: 0,
+              fontSize: "clamp(14px, 2vw, 24px)",
+
               // width: "30%",
               // height: "5%",
               // height: "10px",
