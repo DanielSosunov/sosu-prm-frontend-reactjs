@@ -59,6 +59,7 @@ const ButtonRow = (props) => {
             flex: 1, // Each button will grow and shrink as needed
             textAlign: "center", // Center the text inside the button
             padding: "0 10px", // Add padding inside the button
+            fontSize: "clamp(14px, 2vw, 1.2em)",
           }}
           size="large"
           key={option}
@@ -295,13 +296,15 @@ const AddInteraction = (props) => {
         >
           <Text
             style={{
-              fontSize: "1.2em",
+              fontSize: "clamp(1em, 2vw, 1.2em)",
               fontWeight: "bolder",
             }}
           >
             Select a Contact
           </Text>
-          <Button type={"link"}>Select from Phone Contacts</Button>
+          <Button type={"link"} style={{ padding: 0 }}>
+            Select from Phone
+          </Button>
         </div>
 
         <SelectContact
@@ -312,7 +315,7 @@ const AddInteraction = (props) => {
 
         <Text
           style={{
-            fontSize: "1.2em",
+            fontSize: "clamp(1em, 2vw, 1.2em)",
             fontWeight: "bolder",
             marginBottom: "2%",
             width: "95%",
@@ -331,7 +334,7 @@ const AddInteraction = (props) => {
 
         <Text
           style={{
-            fontSize: "1.2em",
+            fontSize: "clamp(1em, 2vw, 1.2em)",
             fontWeight: "bolder",
             marginBottom: "2%",
             marginTop: "4%",
@@ -351,7 +354,7 @@ const AddInteraction = (props) => {
 
         <Text
           style={{
-            fontSize: "1.2em",
+            fontSize: "clamp(1em, 2vw, 1.2em)",
             fontWeight: "bolder",
             marginBottom: "2%",
             marginTop: "4%",
@@ -371,7 +374,7 @@ const AddInteraction = (props) => {
 
         <Text
           style={{
-            fontSize: "1.2em",
+            fontSize: "clamp(1em, 2vw, 1.2em)",
             fontWeight: "bolder",
             marginTop: "4%",
             marginBottom: "2%",
@@ -401,7 +404,7 @@ const AddInteraction = (props) => {
         >
           <Text
             style={{
-              fontSize: "1.2em",
+              fontSize: "clamp(1em, 2vw, 1.2em)",
               fontWeight: "bolder",
               marginTop: "4%",
               marginBottom: "2%",

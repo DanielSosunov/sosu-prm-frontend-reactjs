@@ -51,7 +51,7 @@ const APIManager = {
         data: { contact: { name: "Daniel", phone: "7185684384", id: "test" } },
       };
     } else if (endpoint.includes("/contacts") && method === "GET") {
-      return { data: { contacts: [{ name: "a", phone: "a", id: "a" }] } };
+      return { data: { contacts: [{ name: "a", phone: "a", id: "test" }] } };
     }
     return { data: {} };
   },
