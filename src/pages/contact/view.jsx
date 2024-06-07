@@ -119,7 +119,6 @@ const ContactPage = (props) => {
             style={{
               // backgroundColor: "green",
               position: "absolute",
-
               marginTop: "1.1em",
             }}
           >

@@ -119,7 +119,7 @@ const SelectContact = (props) => {
         style={{
           margin: "auto",
 
-          width: "95%",
+          width: "100%",
           backgroundColor: contactIdSelected === null ? null : "#f3f3f3",
           borderRadius: 5,
           padding: 5,
@@ -140,7 +140,7 @@ const SelectContact = (props) => {
         style={{
           margin: "auto",
 
-          width: "95%",
+          width: "100%",
           backgroundColor: contactIdSelected === contact.id ? null : "#f3f3f3",
           borderRadius: 5,
           padding: 5,
@@ -174,7 +174,15 @@ const SelectContact = (props) => {
       );
     }
     return (
-      <div style={{ display: "flex", gap: 5, flexDirection: "column" }}>
+      <div
+        style={{
+          display: "flex",
+          gap: 5,
+          flexDirection: "column",
+          padding: 5,
+          margin: "auto",
+        }}
+      >
         {[...list, ...list2]}
       </div>
     );
@@ -211,7 +219,9 @@ const SelectContact = (props) => {
           gap: 5,
           position: "relative",
           zIndex: 10,
+          width: "60vw",
           ...props.style,
+          // backgroundColor: "red",
         }}
       >
         {contactsExpanded && (
@@ -228,7 +238,7 @@ const SelectContact = (props) => {
               top: 40,
               // left: 0,
               // top: 0,
-              paddingTop: 5,
+              // paddingTop: 5,
               paddingBottom: 5,
               borderRadius: 5,
               border: "1px solid #dedede",
@@ -257,7 +267,7 @@ const SelectContact = (props) => {
         {props.title && (
           <Text
             style={{
-              fontSize: "1em",
+              fontSize: "clamp(12px, 2vw, 24px)",
               whiteSpace: "nowrap",
               color: "black",
               alignSelf: "center",
@@ -268,7 +278,11 @@ const SelectContact = (props) => {
         )}
 
         <Button
-          style={{ width: "100%" }}
+          style={{
+            fontSize: "clamp(12px, 2vw, 24px)",
+            width: "100%",
+            height: "30px",
+          }}
           onClick={() => {
             setContactsExpanded(!contactsExpanded);
           }}

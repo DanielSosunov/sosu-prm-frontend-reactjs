@@ -215,14 +215,17 @@ const Analytics = (props) => {
 
       <div
         style={{
-          marginTop: "1em",
+          marginTop: "1.1em",
           display: "flex",
           flexDirection: "row",
           justifyContent: "flex-end",
           position: "relative",
         }}
       >
-        <MonthYearPicker setYearMonth={setYearMonth} />
+        <MonthYearPicker
+          style={{ width: "30vw" }}
+          setYearMonth={setYearMonth}
+        />
       </div>
 
       <div
@@ -238,7 +241,10 @@ const Analytics = (props) => {
       >
         <StatsCard
           stat={monthlyInteraction.totalInteractions}
-          text={"Interactions with " + "name"}
+          text={
+            "Interactions with " +
+            (props.contact?.name ? props.contact.name : "Everyone")
+          }
           cardColor={"#FDDCFF"}
           icon={
             <MdEmojiPeople

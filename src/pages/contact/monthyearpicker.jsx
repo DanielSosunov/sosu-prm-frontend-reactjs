@@ -60,24 +60,31 @@ const MonthYearPicker = (props) => {
       );
   }, []);
   return (
-    <div style={{ width: "25%" }}>
+    <div style={{ width: "100%", ...props.style }}>
       <div
         style={{
           backgroundColor: "white",
-          padding: "5%",
+          // padding: "5%",
           //   alignItems: "center",
+          fontSize: "clamp(10px, 2vw, 24px)",
+
           whiteSpace: "nowrap",
           borderRadius: "5px",
           border: "1px solid #ededed",
           display: "flex",
           flexDirection: "row",
           justifyContent: "center",
+          height: "30px",
         }}
         onClick={togglePopup}
       >
-        <Text style={{ alignSelf: "center", marginRight: "5%" }}>{`${
-          months[displayMonth - 1]
-        }, ${displayYear}`}</Text>
+        <Text
+          style={{
+            alignSelf: "center",
+            marginRight: "5%",
+            fontSize: "clamp(12px, 2vw, 24px)",
+          }}
+        >{`${months[displayMonth - 1]}, ${displayYear}`}</Text>
         <FaRegCalendarAlt size={"1em"} style={{ alignSelf: "center" }} />
       </div>
       {isOpen && (
@@ -133,9 +140,11 @@ const MonthYearPicker = (props) => {
                 // position: "absolute",
                 // top: 0,
                 // left: 0,
-                height: "100%",
+
+                // height: "100%",
                 // padding: "2%",
                 width: "100%",
+                height: "50px",
                 borderRadius: "5px",
                 padding: "2%",
                 border: "1px solid #d3d3d3",
@@ -164,6 +173,7 @@ const MonthYearPicker = (props) => {
               marginBottom: "3%",
               zIndex: 2,
               width: "90%",
+
               // margin: "auto",
             }}
             onClick={async () => {

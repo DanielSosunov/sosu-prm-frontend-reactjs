@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Typography, Tag } from "antd";
+import { Typography, Tag, Button } from "antd";
 
 const { Text, Title } = Typography;
 
@@ -52,6 +52,7 @@ const PaginatedElement = (props) => {
             flexDirection: "row",
             justifyContent: "space-between",
             flex: 10,
+            width: "100%",
             marginBottom: diaryView ? "2%" : 0,
             // backgroundColor: "green",
           }}
@@ -62,7 +63,7 @@ const PaginatedElement = (props) => {
               display: "flex",
               flexDirection: "column",
               textAlign: "left",
-              // flex: 5,
+              flex: 7,
             }}
           >
             <div
@@ -74,31 +75,51 @@ const PaginatedElement = (props) => {
             >
               <Text
                 style={{
-                  fontSize: "1em",
+                  fontSize: "clamp(10px, 2vw, 24px)",
+
+                  // fontSize: "1em",
                   fontWeight: "bold",
+                  // whiteSpace: "nowrap",
                 }}
               >
                 {interactionTypeLanguage[props.interaction.type.channel]}{" "}
                 {!props.contact && props.interaction.contactName && (
                   <>
-                    <Text style={{ fontWeight: "lighter", fontSize: "1em" }}>
+                    <Text
+                      style={{
+                        fontWeight: "lighter",
+                        fontSize: "clamp(10px, 2vw, 24px)",
+                      }}
+                    >
                       with
                     </Text>{" "}
-                    <Text style={{ fontWeight: "bold", fontSize: "1em" }}>
+                    <Text
+                      style={{
+                        fontWeight: "bold",
+                        fontSize: "clamp(10px, 2vw, 24px)",
+                      }}
+                    >
                       {props.interaction.contactName}
                     </Text>
                   </>
                 )}
               </Text>
               <div style={{ marginLeft: "2px", marginRight: "2px" }} />
-              <Text style={{ fontSize: "0.7em", fontWeight: "regular" }}>
+              <Text
+                style={{
+                  fontSize: "clamp(10px, 2vw, 20px)",
+
+                  fontWeight: "regular",
+                  // whiteSpace: "nowrap",
+                }}
+              >
                 • {new Date(props.interaction.timestamp).toDateString()}
               </Text>
             </div>
 
             <Text
               style={{
-                fontSize: "0.8em",
+                fontSize: "clamp(10px, 2vw, 20px)",
               }}
             >
               {initiatedByLanguage[props.interaction.initiatedBy]}
@@ -106,7 +127,7 @@ const PaginatedElement = (props) => {
 
             <Text
               style={{
-                fontSize: "0.8em",
+                fontSize: "clamp(10px, 2vw, 20px)",
               }}
             >
               {purposeLanguage[props.interaction.purpose]}
@@ -115,52 +136,53 @@ const PaginatedElement = (props) => {
           <div
             style={{
               //   padding: "3%",
+              flex: 3,
               display: "flex",
               flexDirection: "column",
+              alignItems: "end",
               justifyContent: "space-between",
               //   textAlign: "right",
             }}
           >
             <div
               style={{
-                display: "flex",
-                flexDirection: "row",
-                alignSelf: "flex-end",
+                fontSize: "clamp(10px, 2vw, 20px)",
+                padding: 4,
+                borderRadius: "5px",
+                //   border: "1px solid #f3f3f3",
+
+                color: "white",
+                backgroundColor:
+                  props.interaction.sentiment === "positive"
+                    ? "#86DC3D"
+                    : props.interaction.sentiment === "negative"
+                    ? "#ff8080"
+                    : "#48CAE4",
               }}
             >
-              <div
-                style={{
-                  fontSize: "0.8em",
-                  padding: 4,
-                  borderRadius: "5px",
-                  //   border: "1px solid #f3f3f3",
-
-                  color: "white",
-                  backgroundColor:
-                    props.interaction.sentiment === "positive"
-                      ? "#86DC3D"
-                      : props.interaction.sentiment === "negative"
-                      ? "#ff8080"
-                      : "#48CAE4",
-                }}
-              >
-                {sentimentLanguage[props.interaction.sentiment]}
-              </div>
+              {sentimentLanguage[props.interaction.sentiment]}
             </div>
             {props.interaction.diary && (
-              <div
+              <Button
+                type={"link"}
+                // size={"middle"}
                 style={{
-                  fontSize: "0.8em",
+                  // width: "100%",
+                  fontSize: "clamp(10px, 2vw, 24px)",
+                  padding: 0,
+                  margin: 0,
+                  // fontSize: window.innerWidth * 0.03,
                   //   backgroundColor: "#1578FE",
                   //   color: "white",
-                  backgroundColor: "white",
+                  // backgroundColor: "white",
                   //   border: "1px solid #f3f3f3",
-                  borderRadius: "5px",
-                  padding: 4,
+                  // borderRadius: "5px",
+                  // padding: 4,
+                  // whiteSpace: "nowrap",
                 }}
               >
                 {diaryView ? "Click to hide diary" : "Click to view diary"}
-              </div>
+              </Button>
             )}
           </div>
         </div>
@@ -179,13 +201,15 @@ const PaginatedElement = (props) => {
           >
             <Text
               style={{
-                fontSize: "0.8em",
+                fontSize: "clamp(10px, 2vw, 24px)",
                 fontWeight: "bold",
               }}
             >
               Diary
             </Text>
-            <Text style={{ fontSize: "0.8em" }}>{props.interaction.diary}</Text>
+            <Text style={{ fontSize: "clamp(10px, 2vw, 24px)" }}>
+              {props.interaction.diary}
+            </Text>
           </div>
         )}
       </div>
