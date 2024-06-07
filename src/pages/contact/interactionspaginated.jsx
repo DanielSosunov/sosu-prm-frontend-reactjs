@@ -47,6 +47,15 @@ const InteractionsPaginated = ({ contact }) => {
   const [listOfInteractions, setListOfInteractions] = useState([]);
   const [loading, setLoading] = useState(false);
 
+  useEffect(() => {
+    console.log(
+      `useeffect listOfInteractions:\n${JSON.stringify(
+        listOfInteractions,
+        null,
+        2
+      )}`
+    );
+  }, [listOfInteractions]);
   function generateRenderedListOfItems(interactions) {
     var list = [];
     for (var i = 0; i < interactions.length; i++) {
@@ -98,7 +107,7 @@ const InteractionsPaginated = ({ contact }) => {
             // color: "#EdEdEd",
             // color: "black",
             zIndex: 2,
-            opacity: 0,
+            opacity: 0, //Hidden Load button
             width: "30%",
             // margin: "auto",
           }}
@@ -179,13 +188,33 @@ const InteractionsPaginated = ({ contact }) => {
         }}
       >
         All Interactions
+        {contact && (
+          <>
+            {" "}
+            <Text
+              style={{
+                fontSize: "1em",
+
+                color: "black",
+              }}
+            >
+              with
+            </Text>{" "}
+            <Text
+              style={{
+                fontSize: "1em",
+
+                color: "black",
+                fontWeight: "bold",
+              }}
+            >
+              {contact.name}
+            </Text>
+          </>
+        )}
       </Text>
 
-      <div style={{ height: "100%", width: "100%" }}>
-        <Text>Add some interactions for them to show up.</Text>
-      </div>
-
-      {/* {loading && (
+      {loading && (
         <Spin
           style={{
             position: "absolute",
@@ -205,7 +234,16 @@ const InteractionsPaginated = ({ contact }) => {
           indicator={<LoadingOutlined style={{ fontSize: 24 }} spin />}
         />
       )}
-      {listOfInteractions.length > 0 && listOfInteractions} */}
+      {listOfInteractions.length > 1 && listOfInteractions}
+      {listOfInteractions.length <= 1 && !loading && (
+        <div style={{ height: "100%", width: "100%" }}>
+          <Text
+            style={{ backgroundColor: "white", padding: 10, borderRadius: 5 }}
+          >
+            Add some interactions for them to show up.
+          </Text>
+        </div>
+      )}
     </Content>
   );
 };
