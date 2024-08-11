@@ -1,48 +1,27 @@
 import React, { useState, useEffect } from "react";
-import {
-  Button,
-  Tabs,
-  Layout,
-  Avatar,
-  Typography,
-  Card,
-  Flex,
-  Segmented,
-  Divider,
-  Affix,
-  Radio,
-  Spin,
-} from "antd";
-import {
-  ArrowLeftOutlined,
-  PlusCircleOutlined,
-  LoadingOutlined,
-} from "@ant-design/icons";
-import { MdEmojiPeople, MdFavorite } from "react-icons/md";
-import { PiHandsClappingBold } from "react-icons/pi";
-// import "a ntd/dist/antd.css";
-import StatsCard from "../../utils/StatsCard";
-import BarChartWithTabs from "../../utils/BarChart";
-import AddInteraction from "../addinteraction/addinteraction";
+import { Button, Tabs, Layout, Typography, Divider, Affix } from "antd";
 import Analytics from "./analytics";
-import APIManager from "../../utils/APIManager";
-import LocalStorageManager from "../../utils/LocalStorageManager";
 import InteractionsPaginated from "./interactionspaginated";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import SelectContact from "./selectcontact";
 
-const { Header, Content } = Layout;
-const { TabPane } = Tabs;
-const { Text, Title } = Typography;
+const { Text } = Typography;
 
 const ContactPage = (props) => {
   // const { name, phone, email, photo } = contact;
   const [contact, setContact] = useState(null);
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
 
   useEffect(() => {
-    console.log(contact);
-  }, [contact]);
+    if (searchParams.get("contactId")) {
+      setContact({
+        phone: searchParams.get(`contactPhone`),
+        name: searchParams.get(`contactName`),
+        id: searchParams.get(`contactId`),
+      });
+    }
+  }, []);
 
   return (
     <div style={{ backgroundColor: "#f3f3f3" }}>
@@ -57,41 +36,15 @@ const ContactPage = (props) => {
             justifyContent: "end",
           }}
         >
-          {/* <div
-            style={{
-              backgroundColor: "white",
-              width: "100%",
-              display: "flex",
-              flexDirection: "row",
-              marginLeft: "3%",
-              // justifyContent: "center",
-              height: 60,
-            }}
-          > */}
-          {/* <ArrowLeftOutlined
-            style={{
-              // position: "absolute",
-              marginLeft: "2.5%",
-              padding: 0,
-              // marginRight: "3%",
-              alignSelf: "center",
-              //   backgroundColor: "green",
-              fontSize: "16px",
-            }}
-          /> */}
-          {/* </div> */}
           <Text
             style={{
               ...styles.titleText,
               display: "flex",
               position: "absolute",
               alignSelf: "center",
-              // alignItems: "center",
-              // alignContent: "center",
               justifyContent: "center",
               width: "100%",
               textAlign: "center",
-              // backgroundColor: "red",
             }}
           >
             Analytics
@@ -99,20 +52,11 @@ const ContactPage = (props) => {
           <Button
             type="link"
             size={"large"}
-            // icon={<PlusCircleOutlined />}
             style={{
-              // position: "fixed",
-              // bottom: "3%",
-              // justifySelf: "end",
               alignSelf: "center",
               padding: 0,
               fontSize: "clamp(14px, 2vw, 24px)",
-
-              // width: "30%",
-              // height: "5%",
-              // height: "10px",
               right: "2.5%",
-              // margin: "auto",
               zIndex: 3,
             }}
             onClick={() => {
@@ -134,19 +78,12 @@ const ContactPage = (props) => {
             position: "relative",
             width: "95%",
             margin: "auto",
-            // zIndex: 1,
           }}
         >
-          <div
-            style={{
-              // backgroundColor: "green",
-              position: "absolute",
-              marginTop: "1.1em",
-            }}
-          >
-            <SelectContact title="Analytics For " getContact={setContact} />
-          </div>
-          <Analytics contact={contact} />
+          <Analytics
+            contactName={searchParams.get(`contactName`)}
+            contact={contact}
+          />
           <Divider />
           <InteractionsPaginated contact={contact} />
         </div>

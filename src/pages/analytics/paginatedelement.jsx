@@ -66,7 +66,7 @@ const PaginatedElement = (props) => {
               display: "flex",
               flexDirection: "column",
               textAlign: "left",
-              flex: 7,
+              flex: 8,
             }}
           >
             <div
@@ -78,10 +78,11 @@ const PaginatedElement = (props) => {
             >
               <Text
                 style={{
-                  fontSize: "clamp(10px, 2vw, 24px)",
+                  fontSize: "clamp(14px, 16px, 24px)",
 
                   // fontSize: "1em",
                   fontWeight: "bold",
+                  whiteSpace: "nowrap",
                   // whiteSpace: "nowrap",
                 }}
               >
@@ -91,7 +92,7 @@ const PaginatedElement = (props) => {
                     <Text
                       style={{
                         fontWeight: "lighter",
-                        fontSize: "clamp(10px, 2vw, 24px)",
+                        fontSize: "clamp(14px, 16px, 24px)",
                       }}
                     >
                       with
@@ -99,7 +100,7 @@ const PaginatedElement = (props) => {
                     <Text
                       style={{
                         fontWeight: "bold",
-                        fontSize: "clamp(10px, 2vw, 24px)",
+                        fontSize: "clamp(14px, 16px, 24px)",
                       }}
                     >
                       {props.interaction.contactName}
@@ -113,7 +114,7 @@ const PaginatedElement = (props) => {
                   fontSize: "clamp(10px, 2vw, 20px)",
 
                   fontWeight: "regular",
-                  // whiteSpace: "nowrap",
+                  whiteSpace: "nowrap",
                 }}
               >
                 • {new Date(props.interaction.timestamp).toDateString()}
@@ -122,7 +123,7 @@ const PaginatedElement = (props) => {
 
             <Text
               style={{
-                fontSize: "clamp(10px, 2vw, 20px)",
+                fontSize: "clamp(14px, 16, 20px)",
               }}
             >
               {initiatedByLanguage[props.interaction.initiatedBy]}
@@ -130,7 +131,7 @@ const PaginatedElement = (props) => {
 
             <Text
               style={{
-                fontSize: "clamp(10px, 2vw, 20px)",
+                fontSize: "clamp(14px, 16, 20px)",
               }}
             >
               {purposeLanguage[props.interaction.purpose]}
@@ -139,7 +140,7 @@ const PaginatedElement = (props) => {
           <div
             style={{
               //   padding: "3%",
-              flex: 3,
+              flex: 2,
               display: "flex",
               flexDirection: "column",
               alignItems: "end",
@@ -171,7 +172,7 @@ const PaginatedElement = (props) => {
                 // size={"middle"}
                 style={{
                   // width: "100%",
-                  fontSize: "clamp(10px, 2vw, 24px)",
+                  fontSize: "clamp(12px, 14px, 20px)",
                   padding: 0,
                   margin: 0,
                   // fontSize: window.innerWidth * 0.03,
@@ -204,13 +205,13 @@ const PaginatedElement = (props) => {
           >
             <Text
               style={{
-                fontSize: "clamp(10px, 2vw, 24px)",
+                fontSize: "clamp(14px, 16px, 20px)",
                 fontWeight: "bold",
               }}
             >
               Diary
             </Text>
-            <Text style={{ fontSize: "clamp(10px, 2vw, 24px)" }}>
+            <Text style={{ fontSize: "clamp(14px, 16px, 20px)" }}>
               {props.interaction.diary}
             </Text>
           </div>

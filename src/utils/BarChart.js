@@ -160,12 +160,14 @@ const BarChartWithTabs = ({ data }) => {
         borderRadius: "2%",
       }}
     >
-      <Segmented
-        defaultValue="Type"
-        //   style={{ marginBottom: 8 }}
-        onChange={(value) => setTab(value)}
-        options={["Type", "Purpose", "Sentiment"]}
-      />
+      <div style={{ width: "100%", textAlign: "center" }}>
+        <Segmented
+          defaultValue="Type"
+          onChange={(value) => setTab(value)}
+          options={["Type", "Purpose", "Sentiment"]}
+        />
+      </div>
+
       {tab === "Purpose" && (
         <BarChart data={data.purpose} colorType={"red"} title={"Purpose"} />
       )}

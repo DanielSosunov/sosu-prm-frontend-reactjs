@@ -86,8 +86,13 @@ const Analytics = (props) => {
     console.log(`UseEffect [yearMonth]`, yearMonth);
 
     fetchMonthlyInteractions();
-  }, [yearMonth, props.contact]);
+  }, [props.contact, yearMonth]);
 
+  // useEffect(() => {
+  //   console.log(`UseEffect [yearMonth]`, yearMonth);
+
+  //   fetchMonthlyInteractions();
+  // }, [yearMonth]);
   //Every time the Monthly Interaction data is set from the API call
   useEffect(() => {
     console.log(`UseEffect:[monthlyInteraction]`, monthlyInteraction);
@@ -215,13 +220,16 @@ const Analytics = (props) => {
 
       <div
         style={{
-          marginTop: "1.1em",
+          marginTop: "1em",
           display: "flex",
           flexDirection: "row",
-          justifyContent: "flex-end",
+          justifyContent: "space-between",
           position: "relative",
         }}
       >
+        <div style={{ alignContent: "center" }}>
+          Analytics for {props.contactName}
+        </div>
         <MonthYearPicker
           style={{ width: "30vw" }}
           setYearMonth={setYearMonth}
@@ -241,10 +249,7 @@ const Analytics = (props) => {
       >
         <StatsCard
           stat={monthlyInteraction.totalInteractions}
-          text={
-            "Interactions with " +
-            (props.contact?.name ? props.contact.name : "Everyone")
-          }
+          text={"Interactions with " + props.contactName}
           cardColor={"#FDDCFF"}
           icon={
             <MdEmojiPeople

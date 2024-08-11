@@ -36,6 +36,7 @@ import LocalStorageManager from "../../utils/LocalStorageManager";
 import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 import PaginatedElement from "./paginatedelement";
+import SingleInteraction from "./singleinteraction";
 const { Header, Content } = Layout;
 const { TabPane } = Tabs;
 const { Text, Title } = Typography;
@@ -48,13 +49,13 @@ const InteractionsPaginated = ({ contact }) => {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    console.log(
-      `useeffect listOfInteractions:\n${JSON.stringify(
-        listOfInteractions,
-        null,
-        2
-      )}`
-    );
+    // console.log(
+    //   `useeffect listOfInteractions:\n${JSON.stringify(
+    //     listOfInteractions,
+    //     null,
+    //     2
+    //   )}`
+    // );
   }, [listOfInteractions]);
   function generateRenderedListOfItems(interactions) {
     var list = [];
@@ -62,8 +63,20 @@ const InteractionsPaginated = ({ contact }) => {
       var interaction = interactions[i];
       console.log(interaction);
       list.push(
-        <PaginatedElement contact={contact} interaction={interaction} />
+        <SingleInteraction
+          key={interaction.id}
+          contact={interaction.contactName}
+          time={interaction.timestamp}
+          method={interaction.type}
+          sentiment={interaction.sentiment}
+          purpose={interaction.purpose}
+          initiatedBy={interaction.direction === "outgoing" ? "Me" : "They"}
+          diary={interaction.diary}
+        />
       );
+      // list.push(
+      //   <PaginatedElement contact={contact} interaction={interaction} />
+      // );
     }
     var startAfter = LocalStorageManager.getItem("paginatedPointer");
     if (startAfter !== null && startAfter !== `null`) {

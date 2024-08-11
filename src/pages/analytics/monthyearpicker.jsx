@@ -1,205 +1,169 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState } from "react";
 import {
+  Modal,
+  Select,
+  Checkbox,
   Button,
-  Tabs,
-  Layout,
-  Avatar,
   Typography,
-  Card,
-  Flex,
-  Segmented,
-  Divider,
-  Affix,
-  Radio,
-  Spin,
-  Tag,
+  Row,
+  Col,
+  Space,
 } from "antd";
 import moment from "moment";
-import {
-  ArrowLeftOutlined,
-  PlusCircleOutlined,
-  LoadingOutlined,
-  UpCircleOutlined,
-  DownCircleOutlined,
-  CheckCircleOutlined,
-} from "@ant-design/icons";
-import { FaAngleLeft, FaAngleRight, FaRegCalendarAlt } from "react-icons/fa";
+import { FaRegCalendarAlt } from "react-icons/fa";
 
-const { Text, Title } = Typography;
+const { Text } = Typography;
 
-const MonthYearPicker = (props) => {
-  const today = new Date();
-  const [displayYear, setDisplayYear] = useState(today.getFullYear());
-  const [displayMonth, setDisplayMonth] = useState(today.getMonth() + 1); // JavaScript months are 0-indexed
-  const [year, setYear] = useState(today.getFullYear());
-  const [month, setMonth] = useState(today.getMonth() + 1);
-  const [isOpen, setIsOpen] = useState(false);
-  const selectMenu = useRef(null);
-  const months = [
-    "January",
-    "February",
-    "March",
-    "April",
-    "May",
-    "June",
-    "July",
-    "August",
-    "September",
-    "October",
-    "November",
-    "December",
-  ];
+const months = [
+  { value: 1, label: "January" },
+  { value: 2, label: "February" },
+  { value: 3, label: "March" },
+  { value: 4, label: "April" },
+  { value: 5, label: "May" },
+  { value: 6, label: "June" },
+  { value: 7, label: "July" },
+  { value: 8, label: "August" },
+  { value: 9, label: "September" },
+  { value: 10, label: "October" },
+  { value: 11, label: "November" },
+  { value: 12, label: "December" },
+];
 
-  const incrementYear = () => setYear((prevYear) => prevYear + 1);
-  const decrementYear = () => setYear((prevYear) => prevYear - 1);
+const currentYear = new Date().getFullYear();
+const years = Array.from(new Array(20), (val, index) => currentYear - index);
 
-  const handleMonthChange = (event) => {
-    setMonth(event.target.value);
+const MonthYearPicker = ({ setYearMonth }) => {
+  const [selectedMonth, setSelectedMonth] = useState(new Date().getMonth() + 1);
+  const [selectedYear, setSelectedYear] = useState(currentYear);
+  const [selectAll, setSelectAll] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  // Temporary state to hold changes in the modal
+  const [tempMonth, setTempMonth] = useState(selectedMonth);
+  const [tempYear, setTempYear] = useState(selectedYear);
+  const [tempSelectAll, setTempSelectAll] = useState(selectAll);
+
+  const handleMonthChange = (value) => {
+    setTempMonth(value);
+    setTempSelectAll(false);
   };
 
-  const togglePopup = () => {
-    setIsOpen(!isOpen);
+  const handleYearChange = (value) => {
+    setTempYear(value);
+    setTempSelectAll(false);
   };
 
-  useEffect(() => {
-    if (props.setYearMonth)
-      props.setYearMonth(
-        moment(`${months[displayMonth - 1]}, ${displayYear}`).format("YYYY-MM")
-      );
-  }, []);
+  const handleSelectAllChange = (e) => {
+    setTempSelectAll(e.target.checked);
+    if (e.target.checked) {
+      setTempMonth(null);
+      setTempYear(null);
+    } else {
+      setTempMonth(selectedMonth);
+      setTempYear(selectedYear);
+    }
+  };
+
+  const handleOk = () => {
+    setSelectAll(tempSelectAll);
+    if (tempSelectAll) {
+      setYearMonth("All");
+    } else if (tempMonth && tempYear) {
+      setYearMonth(moment([tempYear, tempMonth - 1]).format("YYYY-MM"));
+      setSelectedMonth(tempMonth);
+      setSelectedYear(tempYear);
+    }
+    setIsModalOpen(false);
+  };
+
+  const handleCancel = () => {
+    setIsModalOpen(false);
+  };
+
+  const showModal = () => {
+    // Set temp state to current state
+    setTempMonth(selectedMonth);
+    setTempYear(selectedYear);
+    setTempSelectAll(selectAll);
+    setIsModalOpen(true);
+  };
+
   return (
-    <div style={{ width: "100%", ...props.style }}>
-      <div
+    <>
+      <Button
+        onClick={showModal}
         style={{
-          backgroundColor: "white",
-          // padding: "5%",
-          //   alignItems: "center",
-          fontSize: "clamp(10px, 2vw, 24px)",
-
-          whiteSpace: "nowrap",
-          borderRadius: "5px",
-          border: "1px solid #ededed",
+          width: "auto",
+          textAlign: "left",
           display: "flex",
-          flexDirection: "row",
-          justifyContent: "center",
-          height: "30px",
+          alignItems: "center",
+          justifyContent: "space-between",
+          gap: "8px",
         }}
-        onClick={togglePopup}
       >
         <Text
+          ellipsis={{ tooltip: true }}
           style={{
-            alignSelf: "center",
-            marginRight: "5%",
-            fontSize: "clamp(12px, 2vw, 24px)",
-          }}
-        >{`${months[displayMonth - 1]}, ${displayYear}`}</Text>
-        <FaRegCalendarAlt size={"1em"} style={{ alignSelf: "center" }} />
-      </div>
-      {isOpen && (
-        <div
-          style={{
-            width: "100%",
-            display: "flex",
-            flexDirection: "column",
-            position: "absolute",
-            right: 0,
-            backgroundColor: "white",
-            // padding: "2%",
-            borderRadius: "5px",
-
-            marginTop: "2%",
+            flexShrink: 1,
           }}
         >
-          <div
-            style={{
-              display: "flex",
-              flexDirection: "row",
-              marginBottom: "3%",
-              marginLeft: "5%",
-              marginTop: "3%",
-              marginRight: "5%",
-              justifyContent: "space-between",
-              alignItems: "center",
-              width: "90%",
-            }}
-          >
-            <FaAngleLeft size={"1.5em"} onClick={decrementYear}></FaAngleLeft>
-            <span>{year}</span>
-            <FaAngleRight size={"1.5em"} onClick={incrementYear}></FaAngleRight>
-          </div>
-          <div
-            style={{
-              width: "90%",
-              display: "flex",
-              position: "relative",
-              margin: "auto",
-              alignContent: "center",
-              // padding: "2%",
-              marginBottom: "2%",
-              // position: "relative",
-            }}
-            onClick={() => {
-              if (selectMenu.current) selectMenu.current.focus();
-            }}
-          >
-            <select
-              ref={selectMenu}
-              style={{
-                // backgroundColor: "red",
-                // position: "absolute",
-                // top: 0,
-                // left: 0,
-
-                // height: "100%",
-                // padding: "2%",
-                width: "100%",
-                height: "50px",
-                borderRadius: "5px",
-                padding: "2%",
-                border: "1px solid #d3d3d3",
-                // paddingLeft: "2%",
-                // paddingRight: "2%",
-              }}
-              value={month}
-              onChange={handleMonthChange}
-            >
-              {months.map((name, index) => (
-                <option key={name} value={index + 1}>
-                  {name}
-                </option>
-              ))}
-            </select>
-          </div>
-
-          <Button
-            type="primary"
-            shape="round"
-            size={"small"}
-            // icon={<PlusCircleOutlined />}
-            style={{
-              height: "40px",
-              marginLeft: "5%",
-              marginBottom: "3%",
-              zIndex: 2,
-              width: "90%",
-
-              // margin: "auto",
-            }}
-            onClick={async () => {
-              if (props.setYearMonth)
-                props.setYearMonth(
-                  moment(`${months[month - 1]}, ${year}`).format("YYYY-MM")
-                );
-              setDisplayMonth(month);
-              setDisplayYear(year);
-              togglePopup();
-            }}
-          >
+          {selectAll
+            ? "All"
+            : `${months[selectedMonth - 1]?.label}, ${selectedYear}`}
+        </Text>
+        <FaRegCalendarAlt style={{ flexShrink: 0 }} />
+      </Button>
+      <Modal
+        title="Select Month and Year"
+        visible={isModalOpen}
+        onOk={handleOk}
+        onCancel={handleCancel}
+        footer={[
+          <Button key="back" onClick={handleCancel}>
+            Cancel
+          </Button>,
+          <Button key="submit" type="primary" onClick={handleOk}>
             Set Date
-          </Button>
-        </div>
-      )}
-    </div>
+          </Button>,
+        ]}
+      >
+        <Checkbox checked={tempSelectAll} onChange={handleSelectAllChange}>
+          Select All
+        </Checkbox>
+        <Row gutter={8} style={{ marginTop: 16 }}>
+          <Col span={12}>
+            <Select
+              placeholder="Select Month"
+              value={tempMonth}
+              onChange={handleMonthChange}
+              style={{ width: "100%" }}
+              disabled={tempSelectAll}
+            >
+              {months.map((month) => (
+                <Select.Option key={month.value} value={month.value}>
+                  {month.label}
+                </Select.Option>
+              ))}
+            </Select>
+          </Col>
+          <Col span={12}>
+            <Select
+              placeholder="Select Year"
+              value={tempYear}
+              onChange={handleYearChange}
+              style={{ width: "100%" }}
+              disabled={tempSelectAll}
+            >
+              {years.map((year) => (
+                <Select.Option key={year} value={year}>
+                  {year}
+                </Select.Option>
+              ))}
+            </Select>
+          </Col>
+        </Row>
+      </Modal>
+    </>
   );
 };
 
