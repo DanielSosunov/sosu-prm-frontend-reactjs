@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import {
   Button,
   Tabs,
@@ -37,6 +37,8 @@ import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 import MonthYearPicker from "./monthyearpicker";
 import SelectContact from "./selectcontact";
+import ContactFab from "./ContactFab";
+import useIsInViewport from "../../utils/useIsInViewport";
 const { Header, Content } = Layout;
 const { TabPane } = Tabs;
 const { Text, Title } = Typography;
@@ -56,6 +58,8 @@ const readable = {
 const Analytics = (props) => {
   // const { name, phone, email, photo } = contact;
   //I commented this out and removed contact from prop. Now I have to edit the Monthly Analytics API call to be able to accept no contact so it can give monthly analytics for all
+  const statsCardRef = useRef(null);
+  const isStatsCardInView = useIsInViewport(statsCardRef);
   const [yearMonth, setYearMonth] = useState(moment().format("YYYY-MM"));
   const [analytics, setAnalytics] = useState(null);
   const [monthlyInteraction, setMonthlyInteraction] = useState({
@@ -261,12 +265,25 @@ const Analytics = (props) => {
           display: "flex",
           flexDirection: "row",
           justifyContent: "space-between",
-          position: "relative",
+          position: "fixed",
+          width: "95%",
+          margin: "auto",
+          paddingTop: "10px",
+          paddingBottom: "10px",
+          zIndex: 999,
+          opacity: isStatsCardInView ? 1.0 : 0.5,
         }}
       >
-        <div style={{ alignContent: "center" }}>
-          Analytics for {props.contactName}
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "row",
+          }}
+        >
+          {/* <div style={{ alignContent: "center" }}>Analytics for</div> */}
+          <ContactFab contact={props.contact} setContact={props.setContact} />
         </div>
+
         <MonthYearPicker
           style={{ width: "30vw" }}
           setYearMonth={setYearMonth}
@@ -274,7 +291,9 @@ const Analytics = (props) => {
       </div>
 
       <div
+        ref={statsCardRef}
         style={{
+          marginTop: "52px",
           display: "flex",
           flexDirection: "row",
           // gap: "1em",
@@ -286,7 +305,11 @@ const Analytics = (props) => {
       >
         <StatsCard
           stat={monthlyInteraction.totalInteractions}
-          text={"Interactions with " + props.contactName}
+          text={
+            props.contact
+              ? "Interactions with " + props.contact?.name
+              : "All Interactions"
+          }
           cardColor={"#FDDCFF"}
           icon={
             <MdEmojiPeople

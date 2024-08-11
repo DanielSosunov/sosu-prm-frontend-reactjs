@@ -1,45 +1,50 @@
 import React from "react";
-import { Button, Tabs, Layout, Avatar, Typography, Card, Flex } from "antd";
+import { Typography } from "antd";
 
-const { Text, Title } = Typography;
+const { Text } = Typography;
+
 const StatsCard = ({ text, icon, stat, cardColor, style }) => {
   const cardStyle = {
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
-    justifyContent: "center",
+    justifyContent: "space-around", // Ensures equal space between elements
     width: "100%",
     borderRadius: "10px", // Adjust as needed for rounded corners
-    // boxShadow: "0 2px 8px rgba(0, 0, 0, 0.15)", // Adjust as needed for shadow effect
     backgroundColor: cardColor, // Replace with actual color for each activity
     padding: "1em",
-    // marginRight: "1em",
     ...style,
+  };
+
+  const statStyle = {
+    color: "black",
+    fontWeight: "bolder",
+    lineHeight: "1.2",
+    fontSize: "2em",
+    margin: "0", // Remove any default margin
+    textAlign: "center", // Center the text
+  };
+  const textStyle = {
+    lineHeight: "1.1", // Slightly increased line height for better readability
+    color: "#8A7A9A",
+    fontWeight: "normal",
+    margin: "0", // Remove any default margin
+    textAlign: "center", // Center the text
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    height: "2.8em", // Slightly increased height to accommodate larger text
+    whiteSpace: "normal", // Allow text to wrap
+    wordWrap: "break-word", // Break long words onto the next line
+    overflow: "hidden", // Hide any overflow
+    fontSize: "clamp(0.7em, 2.2vw, 0.9em)", // Slightly smaller clamp range to prevent cutting off
   };
 
   return (
     <div style={cardStyle}>
       {icon}
-      <Text
-        style={{
-          color: "black",
-          fontWeight: "bolder",
-          lineHeight: "1.2",
-          fontSize: "2em",
-        }}
-      >
-        {stat}
-      </Text>
-      <Text
-        style={{
-          lineHeight: "1",
-          fontSize: "0.8em",
-          color: "#8A7A9A",
-          fontWeight: "normal",
-        }}
-      >
-        {text}
-      </Text>
+      <Text style={statStyle}>{stat}</Text>
+      <Text style={textStyle}>{text}</Text>
     </div>
   );
 };

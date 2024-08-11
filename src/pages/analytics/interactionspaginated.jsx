@@ -37,6 +37,7 @@ import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 import PaginatedElement from "./paginatedelement";
 import SingleInteraction from "./singleinteraction";
+import { formatYYYYMMtoReadable } from "../../utils/utility";
 const { Header, Content } = Layout;
 const { TabPane } = Tabs;
 const { Text, Title } = Typography;
@@ -134,7 +135,9 @@ const InteractionsPaginated = ({ contact, yearMonth }) => {
   async function fetchPaginatedInteractions() {
     var startAfter = LocalStorageManager.getItem("paginatedPointer");
     var authToken = LocalStorageManager.getItem("authToken");
-    if (startAfter === null || startAfter === "null") startAfter = null;
+    if (startAfter === null || startAfter === "null") {
+      startAfter = null;
+    }
     setLoading(true);
     await APIManager.getPaginatedInteractions(
       contact?.id || null,
@@ -162,7 +165,8 @@ const InteractionsPaginated = ({ contact, yearMonth }) => {
     //Set paginated requests to null
     LocalStorageManager.setItem("paginatedPointer", null);
     setListOfInteractions([]);
-    if (contact?.id) fetchPaginatedInteractions();
+    // if (contact?.id) fetchPaginatedInteractions();
+    fetchPaginatedInteractions();
   }, [contact, yearMonth]);
 
   return (
@@ -192,7 +196,9 @@ const InteractionsPaginated = ({ contact, yearMonth }) => {
           alignSelf: "start",
         }}
       >
-        All Interactions
+        {yearMonth && yearMonth.toLowerCase() !== "all"
+          ? formatYYYYMMtoReadable(yearMonth) + " All Interactions"
+          : "All Interactions"}
         {contact && (
           <>
             {" "}

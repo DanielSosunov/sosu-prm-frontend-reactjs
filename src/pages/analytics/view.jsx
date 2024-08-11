@@ -3,16 +3,16 @@ import { Button, Tabs, Layout, Typography, Divider, Affix } from "antd";
 import Analytics from "./analytics";
 import InteractionsPaginated from "./interactionspaginated";
 import { useNavigate, useSearchParams } from "react-router-dom";
-import SelectContact from "./selectcontact";
 
 const { Text } = Typography;
 
 const ContactPage = (props) => {
   // const { name, phone, email, photo } = contact;
-  const [contact, setContact] = useState(null);
+  const [contact, setContact] = useState(undefined);
+  // const [pulledContactFromURl, setPulledContactFromURL] = useState(false);
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
-  const [yearMonth, setYearMonth] = useState(null);
+  const [yearMonth, setYearMonth] = useState(undefined);
   function sendMessagetoReactNative(message) {
     if (window.ReactNativeWebView) {
       window.ReactNativeWebView.postMessage(JSON.stringify(message));
@@ -25,6 +25,8 @@ const ContactPage = (props) => {
         name: searchParams.get(`contactName`),
         id: searchParams.get(`contactId`),
       });
+    } else {
+      setContact(null);
     }
   }, []);
 
@@ -83,23 +85,27 @@ const ContactPage = (props) => {
         </div>
       </Affix>
 
-      <div style={styles.container}>
-        <div
-          style={{
-            position: "relative",
-            width: "95%",
-            margin: "auto",
-          }}
-        >
-          <Analytics
-            contactName={searchParams.get(`contactName`)}
-            contact={contact}
-            setYearMonth={setYearMonth}
-          />
-          <Divider />
-          <InteractionsPaginated contact={contact} yearMonth={yearMonth} />
+      {contact !== undefined && (
+        <div style={styles.container}>
+          <div
+            style={{
+              position: "relative",
+              width: "95%",
+              margin: "auto",
+            }}
+          >
+            <Analytics
+              setContact={setContact}
+              contact={contact}
+              setYearMonth={setYearMonth}
+            />
+            <Divider />
+            {yearMonth !== undefined && (
+              <InteractionsPaginated contact={contact} yearMonth={yearMonth} />
+            )}
+          </div>
         </div>
-      </div>
+      )}
     </div>
   );
 };

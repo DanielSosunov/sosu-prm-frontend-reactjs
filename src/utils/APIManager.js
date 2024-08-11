@@ -69,8 +69,8 @@ const APIManager = {
     return { data: {} };
   },
   // Base URL for your API
-  // baseURL: "http://127.0.0.1:5001/prm-sosu-tech/us-central1/process_reminder",
-  baseURL: "https://process-reminder-w3dy3wmx2q-uc.a.run.app",
+  baseURL: "http://127.0.0.1:5001/prm-sosu-tech/us-central1/process_reminder",
+  // baseURL: "https://process-reminder-w3dy3wmx2q-uc.a.run.app",
   env: "dev", //Can be local,dev,prod
   // Default headers for all requests
   defaultHeaders: {

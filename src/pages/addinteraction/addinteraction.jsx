@@ -100,7 +100,7 @@ const AddInteraction = () => {
   useEffect(() => {
     setContact({
       phone: searchParams.get(`contactPhone`),
-      name: searchParams.get(`contactName`),
+      name: searchParams.get(`contactName`) || "",
       id: searchParams.get(`contactId`),
     });
   }, []);
@@ -145,7 +145,7 @@ const AddInteraction = () => {
             <div className="contactAvatar">
               {contact.name
                 .split(" ")
-                .map((e) => e[0].toUpperCase())
+                .map((e) => e[0]?.toUpperCase() || "")
                 .join("")}
             </div>
             <div className="contactDetails">

@@ -99,6 +99,7 @@ const MonthYearPicker = ({ setYearMonth }) => {
           alignItems: "center",
           justifyContent: "space-between",
           gap: "8px",
+          height: "32px",
         }}
       >
         <Text
