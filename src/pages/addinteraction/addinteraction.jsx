@@ -63,11 +63,10 @@ const AddInteraction = () => {
   const [diary, setDiary] = useState("");
   const saveButton = useRef(null);
   const [searchParams] = useSearchParams();
-  const navigate = useNavigate();
 
   function sendMessagetoReactNative(message) {
     if (window.ReactNativeWebView) {
-      window.ReactNativeWebView.postMessage(message);
+      window.ReactNativeWebView.postMessage(JSON.stringify(message));
     }
   }
 
@@ -90,7 +89,12 @@ const AddInteraction = () => {
     );
     console.log(interaction);
     setLoading(false);
-    navigate("/analytics?" + pullQueryParamsFromUrl(window.location.href));
+    sendMessagetoReactNative({
+      method: "save",
+      phone: searchParams.get(`contactPhone`),
+      name: searchParams.get(`contactName`),
+      id: searchParams.get(`contactId`),
+    });
   };
 
   useEffect(() => {
@@ -109,7 +113,7 @@ const AddInteraction = () => {
             <ArrowLeftOutlined
               className="backIcon"
               onClick={() => {
-                sendMessagetoReactNative("exit");
+                sendMessagetoReactNative({ method: "exit" });
               }}
             />
           )}

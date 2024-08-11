@@ -44,19 +44,10 @@ const { Text, Title } = Typography;
 /**
  *
  */
-const InteractionsPaginated = ({ contact }) => {
+const InteractionsPaginated = ({ contact, yearMonth }) => {
   const [listOfInteractions, setListOfInteractions] = useState([]);
   const [loading, setLoading] = useState(false);
 
-  useEffect(() => {
-    // console.log(
-    //   `useeffect listOfInteractions:\n${JSON.stringify(
-    //     listOfInteractions,
-    //     null,
-    //     2
-    //   )}`
-    // );
-  }, [listOfInteractions]);
   function generateRenderedListOfItems(interactions) {
     var list = [];
     for (var i = 0; i < interactions.length; i++) {
@@ -148,6 +139,7 @@ const InteractionsPaginated = ({ contact }) => {
     await APIManager.getPaginatedInteractions(
       contact?.id || null,
       startAfter,
+      yearMonth || null,
       authToken
     ).then((result) => {
       console.log(result);
@@ -170,8 +162,8 @@ const InteractionsPaginated = ({ contact }) => {
     //Set paginated requests to null
     LocalStorageManager.setItem("paginatedPointer", null);
     setListOfInteractions([]);
-    fetchPaginatedInteractions();
-  }, [contact]);
+    if (contact?.id) fetchPaginatedInteractions();
+  }, [contact, yearMonth]);
 
   return (
     <Content
@@ -249,11 +241,11 @@ const InteractionsPaginated = ({ contact }) => {
       )}
       {listOfInteractions.length > 1 && listOfInteractions}
       {listOfInteractions.length <= 1 && !loading && (
-        <div style={{ height: "100%", width: "100%" }}>
+        <div style={{ height: "100%", width: "100%", textAlign: "center" }}>
           <Text
             style={{ backgroundColor: "white", padding: 10, borderRadius: 5 }}
           >
-            Add some interactions for them to show up.
+            No interactions found in this date range.
           </Text>
         </div>
       )}

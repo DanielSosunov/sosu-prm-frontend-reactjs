@@ -49,9 +49,10 @@ const SingleInteraction = ({
   };
 
   const getInitials = (name) => {
+    if (name === null || name === undefined) name = "";
     return name
       .split(" ")
-      .map((word) => word[0].toUpperCase())
+      .map((word) => word[0]?.toUpperCase() || "")
       .join("");
   };
 

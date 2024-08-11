@@ -86,7 +86,7 @@ const PaginatedElement = (props) => {
                   // whiteSpace: "nowrap",
                 }}
               >
-                {interactionTypeLanguage[props.interaction.type.channel]}{" "}
+                {interactionTypeLanguage[props.interaction.type]}{" "}
                 {!props.contact && props.interaction.contactName && (
                   <>
                     <Text

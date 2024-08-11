@@ -85,6 +85,7 @@ const Analytics = (props) => {
   useEffect(() => {
     console.log(`UseEffect [yearMonth]`, yearMonth);
 
+    if (yearMonth) props.setYearMonth(yearMonth);
     fetchMonthlyInteractions();
   }, [props.contact, yearMonth]);
 
@@ -143,38 +144,74 @@ const Analytics = (props) => {
     var authToken = LocalStorageManager.getItem("authToken");
 
     setLoading(true);
-    await APIManager.getMonthlyInteractions(
-      props.contact?.id || null,
 
-      yearMonth,
-      authToken
-    ).then((result) => {
-      console.log(result);
-      if (result.data.monthlyInteraction)
-        setMonthlyInteraction(result.data.monthlyInteraction);
-      else {
-        setMonthlyInteraction({
-          totalInteractions: 0,
-          initiatedByMe: 0,
-          initiatedByContact: 0,
-          interactionTypes: {
-            phone: 0,
-            inPerson: 0,
-            messages: 0,
-          },
-          interactionSentiments: {
-            positive: 0,
-            neutral: 0,
-            negative: 0,
-            other: 0,
-          },
-          interactionPurposes: {
-            personal: 0,
-            business: 0,
-          },
-        });
-      }
-    });
+    if (yearMonth.toLowerCase() !== "all") {
+      await APIManager.getMonthlyInteractions(
+        props.contact?.id || null,
+
+        yearMonth,
+        authToken
+      ).then((result) => {
+        console.log(result);
+        if (result.data.monthlyInteraction)
+          setMonthlyInteraction(result.data.monthlyInteraction);
+        else {
+          setMonthlyInteraction({
+            totalInteractions: 0,
+            initiatedByMe: 0,
+            initiatedByContact: 0,
+            interactionTypes: {
+              phone: 0,
+              inPerson: 0,
+              messages: 0,
+            },
+            interactionSentiments: {
+              positive: 0,
+              neutral: 0,
+              negative: 0,
+              other: 0,
+            },
+            interactionPurposes: {
+              personal: 0,
+              business: 0,
+            },
+          });
+        }
+      });
+    } else {
+      await APIManager.getTotalInteractionsOfContact(
+        props.contact?.id || null,
+
+        authToken
+      ).then((result) => {
+        console.log(result);
+        if (result.data.totalInteractions)
+          setMonthlyInteraction(result.data.totalInteractions);
+        else {
+          setMonthlyInteraction({
+            totalInteractions: 0,
+            initiatedByMe: 0,
+            initiatedByContact: 0,
+            interactionTypes: {
+              phone: 0,
+              inPerson: 0,
+              messages: 0,
+            },
+            interactionSentiments: {
+              positive: 0,
+              neutral: 0,
+              negative: 0,
+              other: 0,
+            },
+            interactionPurposes: {
+              personal: 0,
+              business: 0,
+            },
+          });
+        }
+      });
+    }
+
     setLoading(false);
   }
 

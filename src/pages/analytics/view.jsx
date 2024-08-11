@@ -12,7 +12,12 @@ const ContactPage = (props) => {
   const [contact, setContact] = useState(null);
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
-
+  const [yearMonth, setYearMonth] = useState(null);
+  function sendMessagetoReactNative(message) {
+    if (window.ReactNativeWebView) {
+      window.ReactNativeWebView.postMessage(JSON.stringify(message));
+    }
+  }
   useEffect(() => {
     if (searchParams.get("contactId")) {
       setContact({
@@ -60,11 +65,17 @@ const ContactPage = (props) => {
               zIndex: 3,
             }}
             onClick={() => {
-              if (contact)
-                navigate(
-                  `/addinteraction?contactId=${contact.id}&contactName=${contact.name}&contactPhone=${contact.phone}`
-                );
-              else navigate(`/addinteraction`);
+              sendMessagetoReactNative({
+                phone: searchParams.get(`contactPhone`),
+                name: searchParams.get(`contactName`),
+                id: searchParams.get(`contactId`),
+                method: "add-interaction",
+              });
+              // if (contact)
+              //   navigate(
+              //     `/addinteraction?contactId=${contact.id}&contactName=${contact.name}&contactPhone=${contact.phone}`
+              //   );
+              // else navigate(`/addinteraction`);
             }}
           >
             Add Interaction
@@ -83,9 +94,10 @@ const ContactPage = (props) => {
           <Analytics
             contactName={searchParams.get(`contactName`)}
             contact={contact}
+            setYearMonth={setYearMonth}
           />
           <Divider />
-          <InteractionsPaginated contact={contact} />
+          <InteractionsPaginated contact={contact} yearMonth={yearMonth} />
         </div>
       </div>
     </div>

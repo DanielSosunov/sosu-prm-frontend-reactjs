@@ -128,7 +128,7 @@ const MonthYearPicker = ({ setYearMonth }) => {
         ]}
       >
         <Checkbox checked={tempSelectAll} onChange={handleSelectAllChange}>
-          Select All
+          Select All Analytics
         </Checkbox>
         <Row gutter={8} style={{ marginTop: 16 }}>
           <Col span={12}>

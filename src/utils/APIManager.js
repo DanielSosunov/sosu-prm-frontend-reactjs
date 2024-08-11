@@ -133,11 +133,23 @@ const APIManager = {
       Authorization: `Bearer ${authToken}`,
     });
   },
-
-  getPaginatedInteractions: async (contactId, startAfter, authToken) => {
+  getTotalInteractionsOfContact: async (contactId, authToken) => {
+    var url = `/analytics/all?`;
+    if (contactId) url += `&contactId=${contactId}`;
+    return APIManager.request(url, "GET", null, {
+      Authorization: `Bearer ${authToken}`,
+    });
+  },
+  getPaginatedInteractions: async (
+    contactId,
+    startAfter,
+    yearMonth,
+    authToken
+  ) => {
     var url = `/interaction/paginated?`;
     if (contactId) url += `contactId=${contactId}`;
     if (startAfter) url += `&startAfter=${startAfter}`;
+    if (yearMonth) url += `&yearMonth=${yearMonth}`;
     return APIManager.request(url, "GET", null, {
       Authorization: `Bearer ${authToken}`,
     });
